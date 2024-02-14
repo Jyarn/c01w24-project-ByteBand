@@ -1,0 +1,22 @@
+Washroom entry
+{
+	“Id”: 1307,
+	“Name”: “IGA supermarche”,
+	“Google Name”: “IGA - IGA St-Lambert-de-Lauzon”,
+	“Google Address”: “1234 Rue du Pont, Saint-Lambert-de-Lauzon, QC G0S 2W0, Canada”,
+ 	“City”: “Saint-Lambert-de-Lauzon”,
+	“Province”: “Quebec”,
+    "Route Searched": 0,
+    "Searched": 2,
+    "Viewed": 0,
+    "Year": 2015,
+}
+
+Washroom submit info
+{
+	“Entry Id”: “258”,
+	“User Id”: “1793”,
+	“Address”: “1234 Rue du Pont, Saint-Lambert-de-Lauzon, QC G0S 2W0, Canada”,
+	“Pictures?”: {“image1.jpg”, “image2.jpg”},
+	“Description?”: “lorem ipsum”,
+}
