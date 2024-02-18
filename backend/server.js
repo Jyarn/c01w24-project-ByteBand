@@ -86,3 +86,12 @@ app.patch("/updateWashroomTimes/:noteid", express.json(), async (req, res) => {
         res.status(500).json({ response: error.message });
     }
 });
+
+app.get("/getAllWashrooms", express.json(), async(req, res) => {
+    try {
+        const data = await db.collection.find().toArray();
+        res.status(200).json({ response: data });
+    } catch (error) {
+        res.status(500).json({ response: error.message });
+    }
+});
