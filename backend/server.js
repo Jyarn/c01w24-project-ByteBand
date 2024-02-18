@@ -71,8 +71,8 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
   }
 });
 
-app.patch("/updateWashroomTimes/:noteid", express.json(), async (req, res) => {
-    const { noteid } = req.params;
+app.patch("/updateWashroomTimes/:id", express.json(), async (req, res) => {
+    const { id } = req.params;
     const { times} = req.body;
 
     if (!ObjectId.isValid (noteid))
@@ -80,18 +80,36 @@ app.patch("/updateWashroomTimes/:noteid", express.json(), async (req, res) => {
 
     try {
         const collection = db.collection("washrooms");
-        await collection.updateOne({ _id: new ObjectId(noteid) }, {$set: { times }});
+        await collection.updateOne({ _id: new ObjectId(id) }, {$set: { times }});
         res.status(200).json({ response: `${noteid} washroom times updated successfully.` });
     } catch (error) {
         res.status(500).json({ response: error.message });
     }
 });
 
-app.get("/getAllWashrooms", express.json(), async(req, res) => {
+app.get("/getAllWashrooms", express.json(), async (req, res) => {
     try {
         const data = await db.collection.find().toArray();
         res.status(200).json({ response: data });
     } catch (error) {
         res.status(500).json({ response: error.message });
     }
+});
+
+app.post("/postWashroom", express.json(), async (req, res) => {
+    try {
+        const { name } = req.body; // only have name field to be changed later
+
+        if (!name)
+            return res.status(400).json({ response: "missing parameters." });
+
+        const result = await db.collection.insertOne({
+            name,
+        });
+
+        res.json.status(200).json({ response: "Washroom added", id: result.insertedId });
+    } catch (error) {
+        res.status(500).json({ response: error.message });
+    }
+
 });
