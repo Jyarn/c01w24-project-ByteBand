@@ -33,7 +33,8 @@ app.listen(PORT, () => {
 app.use(cors());
 
 const COLLECTIONS = {
-  washroomSubmissions: "Washroom Submissions"
+    washroomSubmissions: "Washroom Submissions",
+    washrooms: "washrooms",
 };
 
 // Post a washroom submission request to the database
@@ -68,4 +69,20 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+});
+
+app.patch("/updateWashroomTimes/:noteid", express.json(), async (req, res) => {
+    const { noteid } = req.params;
+    const { times} = req.body;
+
+    if (!ObjectId.isValid (noteid))
+        return res.status(400).json({ error: "Invalid note ID." });
+
+    try {
+        const collection = db.collection("washrooms");
+        await collection.updateOne({ _id: new ObjectId(noteid) }, {$set: { times }});
+        res.status(200).json({ response: `${noteid} washroom times updated successfully.` });
+    } catch (error) {
+        res.status(500).json({ response: error.message });
+    }
 });
