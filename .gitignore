@@ -1,0 +1,8 @@
+# Dependencies
+node_modules/
+
+# Database
+data/
+
+# Misc
+.DS_Store
