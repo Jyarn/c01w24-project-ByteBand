@@ -96,6 +96,21 @@ app.get("/getAllWashrooms", express.json(), async (req, res) => {
     }
 });
 
+app.get("/getWashroom/:id", express.json(), async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!ObjectId.isValid (noteid))
+            return res.status(400).json({ error: "Invalid note ID." });
+
+        const data = await db.collection.findOne ({ _id: new ObjectId(id) });
+        if (!data)
+            return res.status(404).json({ response: "unable to get washroom" });
+        res.status(200).json({ response: data });
+    } catch (error) {
+        res.status(500).json({ response: error.message});
+    }
+});
+
 app.post("/postWashroom", express.json(), async (req, res) => {
     try {
         const { name } = req.body; // only have name field to be changed later
