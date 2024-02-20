@@ -12,7 +12,6 @@ const COLLECTIONS = {
   washroomSubmissions: "Washroom Submissions"
 };
 
-
 // Connect to MongoDB
 let db;
 
@@ -37,9 +36,6 @@ app.listen(PORT, () => {
 });
 
 app.use(cors());
-
-// Exports to be used in *.test.js files
-export default COLLECTIONS;
 
 // Post a washroom submission request to the database
 app.post("/submitWashroom", express.json(), async (req, res) => {
