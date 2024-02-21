@@ -7,6 +7,11 @@ const PORT = 4000;
 const mongoURL = "mongodb://127.0.0.1:27017";
 const dbName = "GoHereDB";
 
+// Database collection names
+const COLLECTIONS = {
+  washroomSubmissions: "Washroom Submissions"
+};
+
 // Connect to MongoDB
 let db;
 
@@ -27,14 +32,10 @@ connectToMongo();
 
 // Open Port
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 app.use(cors());
-
-const COLLECTIONS = {
-  washroomSubmissions: "Washroom Submissions"
-};
 
 // Post a washroom submission request to the database
 app.post("/submitWashroom", express.json(), async (req, res) => {
