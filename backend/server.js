@@ -71,22 +71,6 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
   }
 });
 
-app.patch("/updateWashroomTimes/:id", express.json(), async (req, res) => {
-    const { id } = req.params;
-    const { times} = req.body;
-
-    if (!ObjectId.isValid (noteid))
-        return res.status(400).json({ error: "Invalid note ID." });
-
-    try {
-        const collection = db.collection("washrooms");
-        await collection.updateOne({ _id: new ObjectId(id) }, {$set: { times }});
-        res.status(200).json({ response: `${noteid} washroom times updated successfully.` });
-    } catch (error) {
-        res.status(500).json({ response: error.message });
-    }
-});
-
 app.get("/getAllWashrooms", express.json(), async (req, res) => {
     try {
         const data = await db.collection.find().toArray();
@@ -99,8 +83,8 @@ app.get("/getAllWashrooms", express.json(), async (req, res) => {
 app.get("/getWashroom/:id", express.json(), async (req, res) => {
     try {
         const { id } = req.params;
-        if (!ObjectId.isValid (noteid))
-            return res.status(400).json({ error: "Invalid note ID." });
+        if (!ObjectId.isValid(id))
+            return res.status(400).json({ response: "Invalid note ID." });
 
         const data = await db.collection.findOne ({ _id: new ObjectId(id) });
         if (!data)
@@ -110,21 +94,38 @@ app.get("/getWashroom/:id", express.json(), async (req, res) => {
         res.status(500).json({ response: error.message});
     }
 });
-
-app.post("/postWashroom", express.json(), async (req, res) => {
-    try {
-        const { name } = req.body; // only have name field to be changed later
-
-        if (!name)
-            return res.status(400).json({ response: "missing parameters." });
-
-        const result = await db.collection.insertOne({
-            name,
-        });
-
-        res.json.status(200).json({ response: "Washroom added", id: result.insertedId });
-    } catch (error) {
-        res.status(500).json({ response: error.message });
+/*
+{
+    ...
+    times: {
+        "Sunday": [
+            {start: , end: }, {...}
+        ],
+        "Monday": [...],
+        ...
     }
+}
+*/
+app.get("/checkAvailability/:id", express.json(), async (req, res) => {
+    const { id } = req.params;
+    const { time } = req.body;
 
+    if (!ObjectId.isValid(id) || !time)
+        return res.status(400).json({ response: "Invalid washroom id"});
+
+    try {
+        const date = new Date(time);
+        const timehash = date.getHours()*60 + date.getMinutes();
+
+        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+        const times = await db.collection.findOne({ _id: new Object(id), times: days[date.getDay()] });
+        times.forEach((t, _) => {
+            if (t.start <= timehash && timehash <= t.end)
+                return res.status(200).json({ response: true });
+        })
+
+        return res.status(200).json({ response: false });
+    } catch (error) {
+        res.status(500).json({ response: error.message});
+    }
 });
