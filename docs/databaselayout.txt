@@ -15,6 +15,7 @@ Washroom entry
 Washroom submit info
 {
     “Id”: “258”,
+    "Type": "Business",
     "Name": "IGA supermarche",
     “Address”: “1234 Rue du Pont, Saint-Lambert-de-Lauzon, QC G0S 2W0, Canada”,
     "City": "Saint-Lambert-de-Lauzon",
