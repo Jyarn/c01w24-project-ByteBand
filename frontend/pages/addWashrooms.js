@@ -6,21 +6,25 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { RadioButton } from 'react-native-paper';
+import ProvinceSelector from '../components/provinceSelector'
 
 const addWashrooms = () => {
-  const [isUser, setIsUser] = useState(true);
+  const [isUser, setIsUser] = useState("User");
   const [locationName, setLocationName] = useState("");
   const [address, setAddress] = useState("");
   const [city, setCity] = useState("");
+  const [province, setProvince] = useState("");
   const [postal, setPostal] = useState("");
   const [email, setEmail] = useState("");
 
   const handleSubmit = () => {
     const addWashrooms = {
-      type: isUser ? "User" : "Business",
+      type: isUser,
       locationName,
       address,
       city,
+      province,
       postal,
       email,
     };
@@ -30,14 +34,22 @@ const addWashrooms = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Retail Info:</Text>
+      <Text style={styles.header}>Location Info</Text>
       <View style={styles.radioContainer}>
-        <TouchableOpacity onPress={() => setIsUser(true)} style={styles.radio}>
-          <Text>User</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setIsUser(false)} style={styles.radio}>
-          <Text>Business</Text>
-        </TouchableOpacity>
+        <RadioButton
+          value="User"
+          status={isUser === 'User' ? 'checked' : 'unchecked'}
+          color="red"
+          onPress={() => setIsUser('User')}
+        />
+        <Text style={styles.radio}>User</Text>
+        <RadioButton
+          value="Business"
+          status={isUser === 'Business' ? 'checked' : 'unchecked'}
+          color="red"
+          onPress={() => setIsUser('Business')}
+        />
+        <Text style={styles.radio}>Business</Text>
       </View>
       <TextInput
         style={styles.input}
@@ -51,13 +63,14 @@ const addWashrooms = () => {
         value={address}
         onChangeText={setAddress}
       />
+      <TextInput
+        style={styles.input}
+        placeholder="City"
+        value={city}
+        onChangeText={setCity}
+      />
       <View style={styles.row}>
-        <TextInput
-          style={[styles.input, styles.flexHalf]}
-          placeholder="City"
-          value={city}
-          onChangeText={setCity}
-        />
+        <ProvinceSelector province={province} setProvince={setProvince} />
         <TextInput
           style={[styles.input, styles.flexHalf]}
           placeholder="Postal"
@@ -65,7 +78,7 @@ const addWashrooms = () => {
           onChangeText={setPostal}
         />
       </View>
-      <Text style={styles.header}>Contact:</Text>
+      <Text style={styles.header}>Your Contact Info:</Text>
       <TextInput
         style={styles.input}
         placeholder="Email Address"
@@ -73,6 +86,8 @@ const addWashrooms = () => {
         onChangeText={setEmail}
         keyboardType="email-address"
       />
+      {isUser == "Business" ? <Text style={[styles.subtext, styles.invis]}>Filler</Text> : 
+        <Text style={styles.subtext}>Contact info is only to inform you if application was successful</Text>}
       <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
         <Text style={styles.submitText}>Submit</Text>
       </TouchableOpacity>
@@ -82,6 +97,7 @@ const addWashrooms = () => {
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 20,
     padding: 20,
     justifyContent: "center",
   },
@@ -93,9 +109,12 @@ const styles = StyleSheet.create({
   radioContainer: {
     flexDirection: "row",
     marginBottom: 20,
+    gap: 5,
   },
   radio: {
-    marginRight: 20,
+    textAlign: "center",
+    marginVertical: "auto",
+    marginRight: 25
   },
   input: {
     marginBottom: 20,
@@ -115,6 +134,7 @@ const styles = StyleSheet.create({
   submitButton: {
     backgroundColor: "red",
     borderRadius: 5,
+    marginTop: 20,
   },
   submitText: {
     color: "white",
@@ -122,6 +142,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     fontWeight: "bold",
   },
+  subtext: {
+    color:"gray",
+    marginTop: -20,
+  },
+  invis: {
+    color:"white",
+  }
 });
 
 export default addWashrooms;
