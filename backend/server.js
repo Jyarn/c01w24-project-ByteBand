@@ -34,7 +34,7 @@ app.use(cors());
 
 const COLLECTIONS = {
     washroomSubmissions: "Washroom Submissions",
-    washrooms: "washrooms",
+    washrooms: "Washrooms",
 };
 
 // Post a washroom submission request to the database
@@ -73,7 +73,8 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
 
 app.get("/getAllWashrooms", express.json(), async (req, res) => {
     try {
-        const data = await db.collection.find().toArray();
+        const coll = db.collection(COLLECTIONS.washrooms);
+        const data = await coll.find().toArray();
         res.status(200).json({ response: data });
     } catch (error) {
         res.status(500).json({ response: error.message });
@@ -86,7 +87,8 @@ app.get("/getWashroom/:id", express.json(), async (req, res) => {
         if (!ObjectId.isValid(id))
             return res.status(400).json({ response: "Invalid note ID." });
 
-        const data = await db.collection.findOne ({ _id: new ObjectId(id) });
+        const coll = db.collection(COLLECTIONS.washrooms);
+        const data = await coll.findOne ({ _id: new ObjectId(id) });
         if (!data)
             return res.status(404).json({ response: "unable to get washroom" });
         res.status(200).json({ response: data });
@@ -94,38 +96,34 @@ app.get("/getWashroom/:id", express.json(), async (req, res) => {
         res.status(500).json({ response: error.message});
     }
 });
-/*
-{
-    ...
-    times: {
-        "Sunday": [
-            {start: , end: }, {...}
-        ],
-        "Monday": [...],
-        ...
-    }
-}
-*/
+
 app.get("/checkAvailability/:id", express.json(), async (req, res) => {
     const { id } = req.params;
-    const { time } = req.body;
+    const day = req.query.day;
+    const hr  = req.query.hr;
+    const min = req.query.min;
 
-    if (!ObjectId.isValid(id) || !time)
+    if (!ObjectId.isValid(id) || !day || !hr || !min)
         return res.status(400).json({ response: "Invalid washroom id"});
 
     try {
-        const date = new Date(time);
-        const timehash = date.getHours()*60 + date.getMinutes();
-
+        const timehash = Number(hr)*60 + Number(min);
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const times = await db.collection.findOne({ _id: new Object(id), times: days[date.getDay()] });
-        times.forEach((t, _) => {
+        const coll = db.collection(COLLECTIONS.washrooms);
+        const data = await coll.findOne({ _id: new ObjectId(id) });
+
+        if (!data)
+            return res.status(404).json({ response: "Unable to get data" });
+
+        data.times[days[Number(day)]].forEach((t, _) => {
+            console.log(t.start, t.end, timehash);
             if (t.start <= timehash && timehash <= t.end)
                 return res.status(200).json({ response: true });
         })
 
         return res.status(200).json({ response: false });
     } catch (error) {
+        console.log(error.message);
         res.status(500).json({ response: error.message});
     }
 });
