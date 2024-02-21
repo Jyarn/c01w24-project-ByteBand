@@ -35,7 +35,8 @@ afterAll(async () => {
   await client.close();
 });
 
-test("/submitWashroom - Post a washroom submission", async () => {
+test("/submitWashroom - Post a washroom submission by an user", async () => {
+  const type = "User";
   const name = "IGA supermarche";
   const address = "1234 Rue du Pont, Saint-Lambert-de-Lauzon, QC G0S 2W0, Canada";
   const city = "Saint-Lambert-de-Lauzon";
@@ -48,6 +49,35 @@ test("/submitWashroom - Post a washroom submission", async () => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
+      type: type,
+      name: name,
+      address: address,
+      city: city,
+      province: province,
+      email: email,
+    }),
+  });
+
+  const postBody = await postRes.json();
+  expect(postRes.status).toBe(200);
+  expect(postBody.response).toBe("Washroom submission added successfully.");
+});
+
+test("/submitWashroom - Post a washroom submission by a business", async () => {
+  const type = "Business";
+  const name = "IGA supermarche";
+  const address = "1234 Rue du Pont, Saint-Lambert-de-Lauzon, QC G0S 2W0, Canada";
+  const city = "Saint-Lambert-de-Lauzon";
+  const province = "Quebec";
+  const email = "user123@gmail.com";
+
+  const postRes = await fetch(`${SERVER_URL}/submitWashroom`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      type: type,
       name: name,
       address: address,
       city: city,
