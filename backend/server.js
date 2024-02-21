@@ -1,5 +1,5 @@
 import express from "express";
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
 import cors from "cors";
 
 const app = express();
@@ -40,8 +40,15 @@ app.use(cors());
 // Post a washroom submission request to the database
 app.post("/submitWashroom", express.json(), async (req, res) => {
   try {
-    const { name, address, city, province, email } = req.body;
+    const { type, name, address, city, province, email } = req.body;
     const createdAt = new Date();
+
+    // Check that the submission type is User or Business
+    if (!type || (type != "User" && type != "Business")) {
+      return res
+        .status(400)
+        .json({ error: "Submission type must be 'User' or 'Business'."});
+    }
 
     // Check that the full address is given
     if (!address || !city || !province) {
@@ -53,6 +60,7 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
     // Send submission info to database
     const collection = db.collection(COLLECTIONS.washroomSubmissions);
     const result = await collection.insertOne({
+      type,
       name,
       address,
       city,
