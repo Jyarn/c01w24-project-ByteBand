@@ -17,8 +17,50 @@ const addWashrooms = () => {
   const [province, setProvince] = useState("");
   const [postal, setPostal] = useState("");
   const [email, setEmail] = useState("");
+  const [error, setError] = useState("");
 
   const handleSubmit = () => {
+    // check if any fields are left empty
+    if (locationName == "" || address == "" || city == "" || province == ""
+      || postal == "" || email == "") {
+      setError("Please Fill in All Fields");
+      return;
+    }
+
+    // check if address starts with number
+    if (!address.match(/^\d+(\s\w+){2,}/)) {
+      setError("Please Enter Address as number street name");
+      return;
+    }
+
+    // check for valid postal codes
+    if (postal.length != 6) {
+      setError("Please Enter a valid Postal Code");
+      return;
+    }
+    // check that all odd characters are letters
+    if (!(postal[0].match(/[a-z]/i) && postal[2].match(/[a-z]/i)
+      && postal[4].match(/[a-z]/i))) {
+      setError("Please Enter a valid Postal Code");
+      return;
+    }
+    // check that all even characters are numbers
+    if (!(postal[1].match(/^\d$/) && postal[3].match(/^\d$/)
+      && postal[5].match(/^\d$/))) {
+      setError("Please Enter a valid Postal Code");
+      return;
+    }
+
+    // check if email is of valid format
+    if (!email.toLowerCase().match(
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    )) {
+      setError("Please Enter a valid Email Address");
+      return;
+    }
+
+    setError("");
+
     const addWashrooms = {
       type: isUser,
       locationName,
@@ -42,39 +84,44 @@ const addWashrooms = () => {
           color="red"
           onPress={() => setIsUser('User')}
         />
-        <Text style={styles.radio}>User</Text>
+        <Text style={styles.radioText}>User</Text>
         <RadioButton
           value="Business"
           status={isUser === 'Business' ? 'checked' : 'unchecked'}
           color="red"
           onPress={() => setIsUser('Business')}
         />
-        <Text style={styles.radio}>Business</Text>
+        <Text style={styles.radioText}>Business</Text>
       </View>
       <TextInput
         style={styles.input}
         placeholder="Location Name"
         value={locationName}
+        autoCapitalize="words"
         onChangeText={setLocationName}
+
       />
       <TextInput
         style={styles.input}
         placeholder="Address"
         value={address}
+        autoCapitalize="words"
         onChangeText={setAddress}
       />
       <TextInput
         style={styles.input}
         placeholder="City"
         value={city}
+        autoCapitalize="words"
         onChangeText={setCity}
       />
       <View style={styles.row}>
         <ProvinceSelector province={province} setProvince={setProvince} />
         <TextInput
           style={[styles.input, styles.flexHalf]}
-          placeholder="Postal"
+          placeholder="Postal Code"
           value={postal}
+          autoCapitalize="characters"
           onChangeText={setPostal}
         />
       </View>
@@ -86,11 +133,13 @@ const addWashrooms = () => {
         onChangeText={setEmail}
         keyboardType="email-address"
       />
-      {isUser == "Business" ? <Text style={[styles.subtext, styles.invis]}>Filler</Text> : 
+      {isUser == "Business" ? <Text style={[styles.subtext, styles.invis]}>
+        Contact info is only to inform you if application was successful</Text> :
         <Text style={styles.subtext}>Contact info is only to inform you if application was successful</Text>}
       <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
         <Text style={styles.submitText}>Submit</Text>
       </TouchableOpacity>
+      <Text style={styles.errorText}>{error}</Text>
     </View>
   );
 };
@@ -111,9 +160,9 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     gap: 5,
   },
-  radio: {
+  radioText: {
     textAlign: "center",
-    marginVertical: "auto",
+    marginTop: 7,
     marginRight: 25
   },
   input: {
@@ -143,12 +192,16 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   subtext: {
-    color:"gray",
+    color: "gray",
     marginTop: -20,
   },
   invis: {
-    color:"white",
-  }
+    color: "white",
+  },
+  errorText: {
+    color: "red",
+    marginTop: 10,
+  },
 });
 
 export default addWashrooms;

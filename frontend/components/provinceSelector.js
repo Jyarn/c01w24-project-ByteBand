@@ -14,7 +14,8 @@ const ProvinceSelector = ({ province, setProvince }) => {
             maxHeight={300}
             labelField="label"
             valueField="label"
-            placeholder="Select Province/Territory"
+            placeholder="Select Prov./Terr."
+            placeholderStyle={styles.placeholderText}
             value={province}
             onChange={item => {
                 setProvince(item.label);
@@ -34,5 +35,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         width: "48%",
+    },
+    placeholderText: {
+        color: "gray"
     },
 });
