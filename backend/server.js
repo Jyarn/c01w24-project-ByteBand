@@ -40,7 +40,7 @@ app.use(cors());
 // Post a washroom submission request to the database
 app.post("/submitWashroom", express.json(), async (req, res) => {
   try {
-    const { type, name, address, city, province, email } = req.body;
+    const { type, name, address, city, province, postal, email } = req.body;
     const createdAt = new Date();
 
     // Check that the submission type is User or Business
@@ -57,6 +57,12 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
           .json({ error: "The full address of the location is required."});
     }
 
+    if (!postal) {
+      return res
+        .status(400)
+        .json({error: "A postal address is required" });
+    }
+
     // Send submission info to database
     const collection = db.collection(COLLECTIONS.washroomSubmissions);
     const result = await collection.insertOne({
@@ -66,6 +72,7 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
       city,
       province,
       email,
+      postal,
       createdAt
     });
 
