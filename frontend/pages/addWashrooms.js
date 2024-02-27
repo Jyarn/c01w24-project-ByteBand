@@ -9,6 +9,8 @@ import {
 import { RadioButton } from 'react-native-paper';
 import ProvinceSelector from '../components/provinceSelector'
 
+const SERVER_URL = "http://localhost:4000";
+
 const addWashrooms = () => {
   const [isUser, setIsUser] = useState("User");
   const [locationName, setLocationName] = useState("");
@@ -19,7 +21,7 @@ const addWashrooms = () => {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // check if any fields are left empty
     if (locationName == "" || address == "" || city == "" || province == ""
       || postal == "" || email == "") {
@@ -61,17 +63,29 @@ const addWashrooms = () => {
 
     setError("");
 
-    const addWashrooms = {
-      type: isUser,
-      locationName,
-      address,
-      city,
-      province,
-      postal,
-      email,
-    };
-    // Here you would send this data to a backend server or handle it as required
-    console.log(addWashrooms);
+    const res = await fetch(`${SERVER_URL}/submitWashroom`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        type: isUser,
+        name: locationName,
+        address: address,
+        city: city,
+        province: province,
+        postal: postal,
+        email: email,
+      }),
+    });
+
+    const body = await res.json();
+
+    if (res.status == 200) {
+      // do something
+    } else {
+      console.log(`failed to submit washroom application (${body.error})`);
+    }
   };
 
   return (
