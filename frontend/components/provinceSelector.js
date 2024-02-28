@@ -1,10 +1,10 @@
 import { StyleSheet } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
-const data = [{ label: "AB" }, { label: "BC" }, { label: "MB" },
-{ label: "NL" }, { label: "NS" }, { label: "NT" },
-{ label: "NU" }, { label: "ON" }, { label: "PE" },
-{ label: "QC" }, { label: "SK" }, { label: "YT" }];
+const data = [{ label: "Alberta" }, { label: "British Columbia" }, { label: "Manitoba" },
+{ label: "Newfoundland And Labrador" }, { label: "Nova Scotia" }, { label: "Northwest Territories" },
+{ label: "Nunavut" }, { label: "Ontario" }, { label: "Prince Edward Island" },
+{ label: "Quebec" }, { label: "Saskatchewan" }, { label: "Yukon Territory" }];
 
 const ProvinceSelector = ({ province, setProvince }) => {
     return (
@@ -16,6 +16,7 @@ const ProvinceSelector = ({ province, setProvince }) => {
             valueField="label"
             placeholder="Select Prov./Terr."
             placeholderStyle={styles.placeholderText}
+            selectedTextProps={styles.selectedText}
             value={province}
             onChange={item => {
                 setProvince(item.label);
@@ -39,4 +40,7 @@ const styles = StyleSheet.create({
     placeholderText: {
         color: "gray"
     },
+    selectedText: {
+        numberOfLines: 1
+    }
 });
