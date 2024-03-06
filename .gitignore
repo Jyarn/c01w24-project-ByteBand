@@ -2,7 +2,7 @@
 node_modules/
 
 # Database
-data/**
+data/
 
 # Misc
 .DS_Store
