@@ -71,6 +71,7 @@ test("/submitWashroom - Post a washroom submission by a business", async () => {
   const address = "1234 Rue du Pont, Saint-Lambert-de-Lauzon, QC G0S 2W0, Canada";
   const city = "Saint-Lambert-de-Lauzon";
   const province = "Quebec";
+  const postal = "A1B 2C3"
   const email = "user123@gmail.com";
 
   const postRes = await fetch(`${SERVER_URL}/submitWashroom`, {
