@@ -1,5 +1,5 @@
 import express from "express";
-import { MongoClient } from "mongodb";
+import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 import parseWashroomTimes from './parseWashroomTimes.js';
 
@@ -63,7 +63,7 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
     if (!postal) {
       return res
         .status(400)
-        .json({error: "A postal address is required" });
+        .json({error: "A postal address is required." });
     }
 
     // Send submission info to database
@@ -74,8 +74,8 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
       address,
       city,
       province,
-      email,
       postal,
+      email,
       createdAt
     });
 
