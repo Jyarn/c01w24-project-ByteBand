@@ -41,6 +41,7 @@ test("/submitWashroom - Post a washroom submission by an user", async () => {
   const address = "1234 Rue du Pont, Saint-Lambert-de-Lauzon, QC G0S 2W0, Canada";
   const city = "Saint-Lambert-de-Lauzon";
   const province = "Quebec";
+  const postal = "A1B 2C3"
   const email = "user123@gmail.com";
 
   const postRes = await fetch(`${SERVER_URL}/submitWashroom`, {
@@ -54,6 +55,7 @@ test("/submitWashroom - Post a washroom submission by an user", async () => {
       address: address,
       city: city,
       province: province,
+      postal: postal,
       email: email,
     }),
   });
@@ -82,6 +84,7 @@ test("/submitWashroom - Post a washroom submission by a business", async () => {
       address: address,
       city: city,
       province: province,
+      postal: postal,
       email: email,
     }),
   });
