@@ -20,6 +20,7 @@ Washroom submit info
     “Address”: “1234 Rue du Pont, Saint-Lambert-de-Lauzon, QC G0S 2W0, Canada”,
     "City": "Saint-Lambert-de-Lauzon",
     "Province": "Quebec",
+    "Postal": "A1B2C3"
     "Email": "user123@gmail.com",
     "Created At": "2024-02-18T02:50:25.228+00:00",
 }
