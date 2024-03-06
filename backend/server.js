@@ -1,5 +1,5 @@
 import express from "express";
-import { MongoClient, ObjectId } from "mongodb";
+import { MongoClient } from "mongodb";
 import cors from "cors";
 import parseWashroomTimes from './parseWashroomTimes.js';
 
@@ -7,6 +7,12 @@ const app = express();
 const PORT = 4000;
 const mongoURL = "mongodb://127.0.0.1:27017";
 const dbName = "GoHereDB";
+
+// Database collection names
+const COLLECTIONS = {
+  washroomSubmissions: "Washroom Submissions"
+  washrooms: "Washrooms",
+};
 
 // Connect to MongoDB
 let db;
@@ -29,23 +35,23 @@ connectToMongo();
 
 // Open Port
 app.listen(PORT, () => {
-    console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://localhost:${PORT}`);
 });
 
 app.use(cors());
 
-const COLLECTIONS = {
-    washroomSubmissions: "Washroom Submissions",
-    washrooms: "Washrooms",
-};
-
-app.get('')
-
 // Post a washroom submission request to the database
 app.post("/submitWashroom", express.json(), async (req, res) => {
   try {
-    const { name, address, city, province, email } = req.body;
+    const { type, name, address, city, province, postal, email } = req.body;
     const createdAt = new Date();
+
+    // Check that the submission type is User or Business
+    if (!type || (type != "User" && type != "Business")) {
+      return res
+        .status(400)
+        .json({ error: "Submission type must be 'User' or 'Business'."});
+    }
 
     // Check that the full address is given
     if (!address || !city || !province) {
@@ -54,14 +60,22 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
           .json({ error: "The full address of the location is required."});
     }
 
+    if (!postal) {
+      return res
+        .status(400)
+        .json({error: "A postal address is required" });
+    }
+
     // Send submission info to database
     const collection = db.collection(COLLECTIONS.washroomSubmissions);
     const result = await collection.insertOne({
+      type,
       name,
       address,
       city,
       province,
       email,
+      postal,
       createdAt
     });
 
