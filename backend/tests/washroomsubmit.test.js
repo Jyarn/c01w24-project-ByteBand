@@ -22,12 +22,11 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  // Store every collection in database in array
-  const collections = await db.listCollections().toArray();
-
-  // Delete every document in every collection
-  for (const collection of collections) {
-    await db.collection(collection.name).deleteMany({});
+  const coll = db.collection("Washroom Submissions");
+  try {
+      await coll.drop({ }); // reset database
+  } catch (error) {
+      console.log(error.message);
   }
 });
 
@@ -41,7 +40,7 @@ test("/submitWashroom - Post a washroom submission by an user", async () => {
   const address = "1234 Rue du Pont, Saint-Lambert-de-Lauzon, QC G0S 2W0, Canada";
   const city = "Saint-Lambert-de-Lauzon";
   const province = "Quebec";
-  const postal = "A1B 2C3"
+  const postal = "A1B 2C3";
   const email = "user123@gmail.com";
 
   const postRes = await fetch(`${SERVER_URL}/submitWashroom`, {
@@ -71,7 +70,7 @@ test("/submitWashroom - Post a washroom submission by a business", async () => {
   const address = "1234 Rue du Pont, Saint-Lambert-de-Lauzon, QC G0S 2W0, Canada";
   const city = "Saint-Lambert-de-Lauzon";
   const province = "Quebec";
-  const postal = "A1B 2C3"
+  const postal = "A1B 2C3";
   const email = "user123@gmail.com";
 
   const postRes = await fetch(`${SERVER_URL}/submitWashroom`, {
