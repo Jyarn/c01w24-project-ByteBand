@@ -46,5 +46,7 @@ async function parseWashroomTimes () {
                 "End": "13:00"
             }
         ],
-    }
+    };
+
+    return ret;
 }
