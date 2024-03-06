@@ -18,13 +18,10 @@
     "react-dom": "18.2.0",
     "react-native": "^0.73.4",
     "uuid": "^9.0.1",
-    "react-dom": "18.2.0",
     "react-native-web": "~0.19.6",
-    "@expo/webpack-config": "~19.0.1"
+    "@expo/webpack-config": "~19.0.1",
     "react-native-element-dropdown": "^2.10.1",
-    "react-native-paper": "^5.12.3",
-    "react-native-web": "~0.19.6",
-    "uuid": "^9.0.1"
+    "react-native-paper": "^5.12.3"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"
