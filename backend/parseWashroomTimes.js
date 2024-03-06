@@ -1,4 +1,4 @@
-async function parseWashroomTimes () {
+function parseWashroomTimes () {
     const ret = {
         "Sunday": [
             {
@@ -43,6 +43,7 @@ async function parseWashroomTimes () {
             }
         ],
     }
+
     return ret;
 }
 

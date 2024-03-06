@@ -24,7 +24,11 @@ beforeAll(async () => {
 
 beforeEach(async () => {
     const coll = db.collection("Washrooms");
-    await coll.drop({ }); // reset database
+    try {
+        await coll.drop({ }); // reset database
+    } catch (error) {
+        console.log(error.message);
+    }
 
     const res = await coll.insertMany([{
             times: {
@@ -39,10 +43,10 @@ beforeEach(async () => {
         },
         {
             times: {
-                "Sunday": [{ start: 540, end: 1350 }],
+                "Sunday": [{ "start": 540, "end": 1350 }],
                 "Monday": [],
                 "Tuesday": [],
-                "Wednesday": [],
+                "Wednesday": [ { "start": 0, "end": 780 }, { "start": 800, "end": 1350 }],
                 "Thursday": [],
                 "Friday": [],
                 "Saturday": [],
@@ -83,3 +87,138 @@ test("check availability - time available", async () =>{
     expect(res.status).toBe(200);
     expect(body.response).toBe(true);
 });
+
+test("get washroom times - empty", async () =>{
+    const res = await fetch(`${SERVER_URL}/getWashroomTimes/${washroomids[0]}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    const body = await res.json();
+    const ev = {
+        Sunday: [],
+        Monday: [],
+        Tuesday: [],
+        Wednesday: [],
+        Thursday: [],
+        Friday: [],
+        Saturday: []
+    };
+
+    expect(res.status).toBe(200);
+    expect(body.response).toEqual(ev);
+});
+
+test("get washroom times - empty", async () =>{
+    const res = await fetch(`${SERVER_URL}/getWashroomTimes/${washroomids[1]}`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    const body = await res.json();
+    const ev = {
+        Sunday: [{ start: '9:00', end: '22:30' }],
+        Monday: [],
+        Tuesday: [],
+        Wednesday: [{ start: '0:00', end: '13:00' }, { start: '13:20', end: '22:30' }],
+        Thursday: [],
+        Friday: [],
+        Saturday: []
+    };
+
+    expect(res.status).toBe(200);
+    expect(body.response).toEqual(ev);
+});
+
+test("get washroom times demo", async () => {
+    const res = await fetch(`${SERVER_URL}/checkAvailabilitydemo`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    const body = await res.json();
+    const ev = {
+        Sunday: [],
+        Monday: [],
+        Tuesday: [],
+        Wednesday: [],
+        Thursday: [],
+        Friday: [],
+        Saturday: []
+    };
+
+    expect(res.status).toBe(200);
+    expect(body.response).toEqual(ev);
+});
+
+test("get washroom times demo - empty", async () => {
+    try {
+        const coll = db.collection("Washrooms");
+        await coll.drop({ }); // reset database
+    } catch (error) {
+        console.log(error.message);
+    }
+
+    const res = await fetch(`${SERVER_URL}/checkAvailabilitydemo/`, {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    });
+
+    const body = await res.json();
+    const ev = {
+        "Sunday": [
+            {
+                "Start": "15:00",
+                "End": "20:00"
+            }
+        ],
+        "Monday": [
+            {
+                "Start": "9:00",
+                "End": "13:00"
+            }
+        ],
+        "Tuesday": [
+            {
+                "Start": "9:00",
+                "End": "13:00"
+            }
+        ],
+        "Wednesday": [
+            {
+                "Start": "9:00",
+                "End": "13:00"
+            }
+        ],
+        "Thursday": [
+            {
+                "Start": "9:00",
+                "End": "13:00"
+            }
+        ],
+        "Friday": [
+            {
+                "Start": "9:00",
+                "End": "13:00"
+            }
+        ],
+        "Saturday": [
+            {
+                "Start": "9:00",
+                "End": "13:00"
+            }
+        ],
+    }
+
+    expect(res.status).toBe(200);
+    expect(body.response).toEqual(ev);
+});
+

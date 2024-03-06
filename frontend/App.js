@@ -2,7 +2,7 @@
 import React from "react";
 import { View } from "react-native";
 
-import AddWashrooms from "./pages/addWashrooms"; 
+import AddWashrooms from "./pages/addWashrooms";
 import UploadWashroomtime from "./pages/uploadWashroomtime";
 const App = () => {
   return (

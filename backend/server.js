@@ -26,6 +26,7 @@ async function connectToMongo() {
 
 connectToMongo();
 
+
 // Open Port
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
@@ -101,14 +102,66 @@ app.get("/getWashroom/:id", express.json(), async (req, res) => {
 });
 
 app.get("/checkAvailabilitydemo", express.json(), async (req, res) => {
-  const id = req.params.id;
-  try {
-    const schedule = await parseWashroomTimes();
-    res.json(schedule);
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({ error: error.message});
-  }
+    try {
+        const coll = db.collection(COLLECTIONS.washrooms);
+        const data = await coll.find().toArray();
+        if (!data || data.length != 0) {
+            const times = data[0].times;
+
+            for (const day in times) {
+                times[day].forEach((time) => {
+                    const start_hr = Math.floor(time.start / 60).toString();
+                    const start_min = (time.start % 60).toString();
+
+                    const end_hr = Math.floor(time.end / 60).toString();
+                    const end_min = (time.end % 60).toString();
+
+                    time.start = `${start_hr}:${start_min.length == 1 ? start_min + "0" : start_min }`;
+                    time.end = `${end_hr}:${end_min.length == 1 ? end_min + "0" : end_min }`;
+                });
+            }
+            return res.status(200).json({ response: times });
+
+        } else {
+            const schedule = parseWashroomTimes();
+            return res.status(200).json({ response: schedule });
+        }
+    } catch (error) {
+        console.log(error.message);
+        res.status(500).json({ error: error.message});
+    }
+});
+
+app.get("/getWashroomTimes/:id", express.json(), async(req, res) => {
+    try {
+        const { id } = req.params;
+        if (!ObjectId.isValid(id))
+            return res.status(400).json({ response: "Invalid note ID." });
+
+        const coll = db.collection(COLLECTIONS.washrooms);
+        const data = await coll.findOne ({ _id: new ObjectId(id) });
+        if (!data)
+            return res.status(404).json({ response: "unable to get washroom" });
+
+        const times = data.times;
+
+        for (const day in times) {
+            times[day].forEach((time) => {
+                const start_hr = Math.floor(time.start / 60).toString();
+                const start_min = (time.start % 60).toString();
+
+                const end_hr = Math.floor(time.end / 60).toString();
+                const end_min = (time.end % 60).toString();
+
+                time.start = `${start_hr}:${start_min.length == 1 ? start_min + "0" : start_min }`;
+                time.end = `${end_hr}:${end_min.length == 1 ? end_min + "0" : end_min }`;
+            });
+        }
+
+        res.status(200).json({ response: times });
+    } catch (error) {
+        res.status(500).json({ response: error.message});
+    }
 });
 
 app.get("/checkAvailability/:id", express.json(), async (req, res) => {
@@ -128,11 +181,11 @@ app.get("/checkAvailability/:id", express.json(), async (req, res) => {
 
         if (!data)
             return res.status(404).json({ response: "Unable to get data" });
-        
+
         let response = false;
 
+        let ret = false;
         data.times[days[Number(day)]].forEach((t, _) => {
-            console.log(t.start, t.end, timehash);
             if (t.start <= timehash && timehash <= t.end)
                 response = true;
                 return;

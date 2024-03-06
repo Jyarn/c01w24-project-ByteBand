@@ -9,7 +9,7 @@ import {
 
 const uploadWashroomtime = () => {
   // Get schedule from backend
-  
+
   const [reason, setReason] = useState("");
   const [schedule, setSchedule] = useState(null);
 
@@ -22,7 +22,7 @@ const uploadWashroomtime = () => {
               console.log("Served failed:", response.status);
             } else {
               await response.json().then((data) => {
-                getScheduleState(data);
+                getScheduleState(data.response);
               });
             }
           }
@@ -31,7 +31,7 @@ const uploadWashroomtime = () => {
         console.log("Fetch function failed:", error);
       }
     };
-  
+
     getSchedule();
   }, []);
 
@@ -41,9 +41,9 @@ const uploadWashroomtime = () => {
   if (!schedule) {
     return <Text>Loading...</Text>; // Or any other loading state representation
   }
-  
+
   return (
-    
+
     <View style={styles.container}>
 
       <Text style={styles.header}>Change Schedule</Text>
@@ -130,13 +130,13 @@ const uploadWashroomtime = () => {
         value={reason}
         onChangeText={setReason}
       />
-      
-      <View><Image 
+
+      <View><Image
         style={styles.photo}
-        source={require('../assets/import.png')} /></View>    
+        source={require('../assets/import.png')} /></View>
         </View>
-    
-   
+
+
   );
 };
 
