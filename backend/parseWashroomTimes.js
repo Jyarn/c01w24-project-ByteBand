@@ -1,10 +1,6 @@
 async function parseWashroomTimes () {
-    ret = {
+    const ret = {
         "Sunday": [
-            {
-                "Start": "9:00",
-                "End": "13:00"
-            },
             {
                 "Start": "15:00",
                 "End": "20:00"
@@ -46,7 +42,8 @@ async function parseWashroomTimes () {
                 "End": "13:00"
             }
         ],
-    };
-
+    }
     return ret;
 }
+
+export default parseWashroomTimes;

@@ -8,7 +8,7 @@ const App = () => {
   return (
   <View style={{ flex: 1 }}>
     {/* Render the addWashrooms component */}
-    <AddWashrooms />
+    <UploadWashroomtime />
     </View>
   );
 };

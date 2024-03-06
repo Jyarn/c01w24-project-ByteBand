@@ -1,6 +1,7 @@
 import express from "express";
 import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
+import parseWashroomTimes from './parseWashroomTimes.js';
 
 const app = express();
 const PORT = 4000;
@@ -36,6 +37,8 @@ const COLLECTIONS = {
     washroomSubmissions: "Washroom Submissions",
     washrooms: "Washrooms",
 };
+
+app.get('')
 
 // Post a washroom submission request to the database
 app.post("/submitWashroom", express.json(), async (req, res) => {
@@ -97,6 +100,17 @@ app.get("/getWashroom/:id", express.json(), async (req, res) => {
     }
 });
 
+app.get("/checkAvailabilitydemo", express.json(), async (req, res) => {
+  const id = req.params.id;
+  try {
+    const schedule = await parseWashroomTimes();
+    res.json(schedule);
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: error.message});
+  }
+});
+
 app.get("/checkAvailability/:id", express.json(), async (req, res) => {
     const { id } = req.params;
     const day = req.query.day;
@@ -114,14 +128,17 @@ app.get("/checkAvailability/:id", express.json(), async (req, res) => {
 
         if (!data)
             return res.status(404).json({ response: "Unable to get data" });
+        
+        let response = false;
 
         data.times[days[Number(day)]].forEach((t, _) => {
             console.log(t.start, t.end, timehash);
             if (t.start <= timehash && timehash <= t.end)
-                return res.status(200).json({ response: true });
+                response = true;
+                return;
         })
 
-        return res.status(200).json({ response: false });
+        return res.status(200).json({ response: response });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ response: error.message});
