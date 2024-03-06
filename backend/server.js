@@ -10,7 +10,7 @@ const dbName = "GoHereDB";
 
 // Database collection names
 const COLLECTIONS = {
-  washroomSubmissions: "Washroom Submissions"
+  washroomSubmissions: "Washroom Submissions",
   washrooms: "Washrooms",
 };
 
