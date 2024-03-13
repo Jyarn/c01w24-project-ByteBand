@@ -1,19 +1,36 @@
 
 import React from "react";
-import { View } from "react-native";
 
 import AddWashrooms from "./pages/addWashrooms";
 import UploadWashroomtime from "./pages/uploadWashroomtime";
-const App = () => {
-  return (
-  <View style={{ flex: 1 }}>
-    {/* Render the addWashrooms component */}
-    <AddWashrooms />
+import HomeScreen from "./pages/homeScreen";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-    {/* Render the uploadWashroomtime component */}
-    {/* <UploadWashroomtime /> */}
-    </View>
-  );
+const Stack = createNativeStackNavigator();
+
+const App = () => {
+
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{ title: "test", headerShown: false }}
+        />
+        <Stack.Screen
+          name="WashroomUpload"
+          component={AddWashrooms}
+          options={{ title: "Suggest a new Washroom" }}
+        />
+        <Stack.Screen
+          name="WashroomTimes"
+          component={UploadWashroomtime}
+        />
+      </Stack.Navigator>
+    </NavigationContainer>
+  )
 };
 
 export default App;
