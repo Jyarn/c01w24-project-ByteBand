@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    top: 40, // Align to the top of the container
+    top: 20, // Align to the top of the container
     left: "center", // Align to the left of the container
     fontSize: 30,
     color: "#000000",
