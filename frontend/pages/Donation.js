@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     margin: 10, // Add a little space from the top and left edges
   },
   redLine: {
-    width: "36%", // Or specific length you prefer
+    width: "40%", // Or specific length you prefer
     height: 3, // Thin line
     backgroundColor: "red", // Line color
     borderRadius: 15, // Makes edges round, adjust as needed
@@ -180,7 +180,6 @@ const styles = StyleSheet.create({
   amount_Text: {
     color: "#000000", // Set the text color
     fontSize: 20,
-    fontWeight: "bold", // This makes the text bold
   },
 
 });
