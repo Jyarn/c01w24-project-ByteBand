@@ -85,48 +85,46 @@ const Donation = () => {
 
 const styles = StyleSheet.create({
   other_title: {
-    position: "absolute",
-    top: 650, // Align to the top of the container
-    left: 70, // Align to the left of the container
-    fontSize: 25,
+    
+    top: 340, // Align to the top of the container
+    left: -120, // Align to the left of the container
+    fontSize: 17,
     color: "#000000",
     margin: 10, // Add a little space from the top and left edges
   },
   amount_title: {
-    position: "absolute",
-    top: 150, // Align to the top of the container
-    left: 70, // Align to the left of the container
-    fontSize: 25,
+   
+    top: 40, // Align to the top of the container
+    left:-100, // Align to the left of the container
+    fontSize: 17,
     color: "#000000",
     margin: 10, // Add a little space from the top and left edges
   },
   redLine: {
-    width: "29%", // Or specific length you prefer
+    width: "36%", // Or specific length you prefer
     height: 4, // Thin line
     backgroundColor: "red", // Line color
     borderRadius: 15, // Makes edges round, adjust as needed
     position: "absolute",
-    top: 200,
-    left: 82,
+    top: 158,
+    left: 40,
   },
   dollar_sign: {
-    position: "absolute",
-    top: 725, // Align to the top of the container
-    left: 98, // Align to the left of the container
-    fontSize: 30,
+    top: -42, // Align to the top of the container
+    left: -130, // Align to the left of the container
+    fontSize: 23,
     color: "#000000",
     margin: 10, // Add a little space from the top and left edges
     fontWeight: "bold",
   },
 
   title: {
-    position: "absolute",
-    top: 20, // Align to the top of the container
+    top: 40, // Align to the top of the container
     left: "center", // Align to the left of the container
-    fontSize: 35,
+    fontSize: 30,
     color: "#000000",
     margin: 10, // Add a little space from the top and left edges
-    fontWeight: 400,
+    
   },
   container: {
     flex: 1,
@@ -137,7 +135,7 @@ const styles = StyleSheet.create({
   other_b: {
     backgroundColor: "#F9F9F9",
     width: "80%",
-    padding: 20,
+    padding: 5,
     marginVertical: 17,
     borderRadius: 15,
     justifyContent: "center",
@@ -145,11 +143,11 @@ const styles = StyleSheet.create({
   },
   other_position: {
     position: "relative", // or 'absolute' based on your desired behavior
-    top: 80, // Adjust the value as needed to move it down
+    top: 20, // Adjust the value as needed to move it down
   },
   other_Text: {
     color: "#000000", // Set the text color
-    fontSize: 20,
+    fontSize: 15,
     textAlign: "center",
   },
   focusedInput: {
@@ -158,21 +156,21 @@ const styles = StyleSheet.create({
 
   amount_b: {
     width: "80%",
-    padding: 20,
+    padding: 5,
     marginVertical: 17,
     borderRadius: 15,
     justifyContent: "center",
     alignItems: "center",
-    top: 10,
+    top: 0,
     borderWidth: 2,
   },
 
   pay_b: {
     width: "70%",
-    padding: 15,
-    top: 150,
+    padding: 2,
+    top: -10,
     marginVertical: 10,
-    borderRadius: 20,
+    borderRadius: 10,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -183,7 +181,7 @@ const styles = StyleSheet.create({
   amount_Text: {
     color: "#000000", // Set the text color
     fontSize: 20,
-    fontWeight: 400, // This makes the text bold
+    fontWeight: "bold", // This makes the text bold
   },
 
 });
