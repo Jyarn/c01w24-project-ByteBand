@@ -1,18 +1,19 @@
-const { MongoClient } = require('mongodb');
-
-const mongoURL = "mongodb://127.0.0.1:27017";
-const dbName = "GoHereDB";
-const SERVER_URL = "http://localhost:4000";
+import { MongoClient } from "mongodb";
+import {
+  SERVER_URL,
+  MONGO_URL,
+  DB_NAME
+} from "../constants/constants.js";
 
 let db;
 let client;
 let washroomids;
 
 async function connectToMongo() {
-  client = await MongoClient.connect(mongoURL);
+  client = await MongoClient.connect(MONGO_URL);
 
   try {
-    db = client.db(dbName);
+    db = client.db(DB_NAME);
   } catch (error) {
     console.error("Error connecting to MongoDB:", error);
   }

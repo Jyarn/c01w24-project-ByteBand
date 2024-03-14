@@ -1,4 +1,3 @@
-
 import React from "react";
 import { View } from "react-native";
 
@@ -8,10 +7,10 @@ const App = () => {
   return (
   <View style={{ flex: 1 }}>
     {/* Render the addWashrooms component */}
-    <AddWashrooms />
+    {/* <AddWashrooms /> */}
 
     {/* Render the uploadWashroomtime component */}
-    {/* <UploadWashroomtime /> */}
+    <UploadWashroomtime />
     </View>
   );
 };

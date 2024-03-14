@@ -1,0 +1,105 @@
+#!/bin/sh
+bold=$(tput bold)
+line=$(tput smul)
+normal=$(tput sgr0)
+
+CMD_NAME="config-const"
+
+ROOT_DIR=$(dirname "$0")
+BACKEND_DIR="$ROOT_DIR/backend"
+FRONTEND_DIR="$ROOT_DIR/frontend"
+CONST_DIR="constants"
+CONST_FILE="constants.js"
+PACKAGE_FILE="package.json"
+
+
+
+
+# Database collections (please update the following when new collections are added to the database)
+DB_COLLECTIONS='// Database collection names
+export const COLLECTIONS = {
+  washroomSubmissions: "Washroom Submissions",
+  washrooms: "Washrooms",
+};'
+
+
+
+
+SERVER_CONSTANTS='// Server URL constants
+export const SERVER_HOST = "localhost";
+export const SERVER_PORT = "4000";
+export const SERVER_URL = `http://${SERVER_HOST}:${SERVER_PORT}`;'
+
+DB_CONSTANTS='// MongoDB constants
+export const MONGO_HOST = "localhost";
+export const MONGO_PORT = "27017";
+export const MONGO_URL = `mongodb://${MONGO_HOST}:${MONGO_PORT}`;
+export const DB_NAME = "GoHereDB";'
+
+CONTENT=
+
+PACKAGE_CONFIG='{
+  "name": "constants",
+  "type": "module"
+}'
+
+HELP_MSG="
+${bold}NAME${normal}
+${bold}$CMD_NAME${normal} [${line}arg1${normal} ${line}arg2${normal} ${line}...${normal}]
+
+${bold}DESCRIPTION${normal}
+The ${bold}$CMD_NAME${normal} shell script is used to configure the
+constants required for both the frontend and backend of the app.
+
+${bold}UTILITY${normal}
+Make new constants files at the backend and frontend directories
+if they do not exist; otherwise override their content. Use default
+values for server host and port if less than two arguments are
+given; otherwise assign to the constants as follows:
+\t${line}arg1${normal} — server host/ip address
+\t${line}arg2${normal} — server port"
+
+SUCCESS_MSG="Constants files have been reconfigured"
+NOT_ENOUGH_ARGS_MSG="Not enough arguments given. Will use default server host and port."
+
+HELP=f
+
+while getopts h flag ; do
+  case "$flag" in
+    h)
+      HELP=t
+      ;;
+    ?)
+      echo "Invalid flag" && exit 0
+      ;;
+  esac
+done
+
+[ $HELP = t ] && echo "$HELP_MSG" && exit 0
+
+shift $(expr $OPTIND - 1)
+
+if [ $# -ge 2 ] ; then
+  SERVER_CONSTANTS="// Server URL constants
+export const SERVER_HOST = \"$1\";
+export const SERVER_PORT = \"$2\";
+export const SERVER_URL = \`http://\${SERVER_HOST}:\${SERVER_PORT}\`;"
+  echo "Server host is now $1 and server port is now $2."
+else
+  echo "$NOT_ENOUGH_ARGS_MSG"
+fi
+
+[ -d "$BACKEND_DIR/$CONST_DIR" ] || mkdir "$BACKEND_DIR/$CONST_DIR"
+[ -f "$BACKEND_DIR/$CONST_DIR/$PACKAGE_FILE" ] || echo "$PACKAGE_CONFIG" > "$BACKEND_DIR/$CONST_DIR/$PACKAGE_FILE"
+[ -d "$FRONTEND_DIR/$CONST_DIR" ] || mkdir "$FRONTEND_DIR/$CONST_DIR"
+[ -f "$FRONTEND_DIR/$CONST_DIR/$PACKAGE_FILE" ] || echo "$PACKAGE_CONFIG" > "$FRONTEND_DIR/$CONST_DIR/$PACKAGE_FILE"
+
+CONTENT="$SERVER_CONSTANTS
+
+$DB_CONSTANTS
+
+$DB_COLLECTIONS"
+
+echo "$CONTENT" > "$BACKEND_DIR/$CONST_DIR/$CONST_FILE"
+echo "$CONTENT" > "$FRONTEND_DIR/$CONST_DIR/$CONST_FILE"
+echo "$SUCCESS_MSG"
