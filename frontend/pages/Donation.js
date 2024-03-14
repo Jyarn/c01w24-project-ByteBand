@@ -180,7 +180,6 @@ const styles = StyleSheet.create({
   amount_Text: {
     color: "#000000", // Set the text color
     fontSize: 20,
-    fontWeight: "bold", // This makes the text bold
   },
 
 });

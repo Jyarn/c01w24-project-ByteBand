@@ -11,7 +11,7 @@ import ProvinceSelector from '../components/provinceSelector'
 
 const SERVER_URL = "http://localhost:4000";
 
-const addWashrooms = () => {
+const AddWashrooms = () => {
   const [isUser, setIsUser] = useState("User");
   const [locationName, setLocationName] = useState("");
   const [address, setAddress] = useState("");
@@ -218,4 +218,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default addWashrooms;
+export default AddWashrooms;
