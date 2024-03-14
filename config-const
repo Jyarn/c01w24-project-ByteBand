@@ -70,7 +70,7 @@ while getopts h flag ; do
       HELP=t
       ;;
     ?)
-      echo "Invalid flag" && exit 0
+      echo "Invalid flag" && exit 1
       ;;
   esac
 done
