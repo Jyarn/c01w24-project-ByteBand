@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   ScrollView,
-  SafeAreaView,
   StatusBar,
 } from "react-native";
+import BusinessLogo from "../components/businessLogo";
 
 const SERVER_URL = "http://localhost:4000";
 
@@ -56,46 +55,34 @@ const BusinessAcknowledgement = () => {
   let i = 0; // temporary for generating unique keys
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
+      <Text style={styles.heading}>Acknowledgements</Text>
       <ScrollView contentContainerStyle={styles.businessList}>
         { businesses.map((business) => {
-              return (
-                <View key={i++} style={styles.businessContainer}>
-                  <Image style={styles.businessLogo} source={{ uri: business.logo }}/>
-                </View>
-              );
+          return <BusinessLogo business={i++} logo={business.logo} />
         }) }
       </ScrollView>
-    </SafeAreaView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingTop: StatusBar.currentHeight + 20,
+    paddingTop: StatusBar.currentHeight,
+  },
+
+  heading: {
+    alignSelf: "center",
+    fontWeight: "bold",
+    fontSize: 30,
+    paddingVertical: "4%",
   },
 
   businessList: {
-    backgroundColor: 'pink',
-    marginHorizontal: 20,
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "center",
-  },
-
-  businessContainer: {
-    aspectRatio: 3/2,
-    width: "30%",
-    height: "30%",
-    margin: 4,
-    backgroundColor: "blue"
-  },
-  
-  businessLogo: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "contain",
   },
 });
 
