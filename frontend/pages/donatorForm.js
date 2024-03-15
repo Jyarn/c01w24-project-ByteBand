@@ -118,6 +118,7 @@ const DonatorForm = () => {
             {isCompany ?
                 <TextInput
                     style={styles.input}
+                    placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                     placeholder="Corporation Name"
                     value={name}
                     autoCapitalize="words"
@@ -125,6 +126,7 @@ const DonatorForm = () => {
                 /> :
                 <TextInput
                     style={styles.input}
+                    placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                     placeholder="Name"
                     value={name}
                     autoCapitalize="words"
@@ -133,6 +135,7 @@ const DonatorForm = () => {
 
             <TextInput
                 style={styles.input}
+                placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                 placeholder="Address"
                 value={address}
                 autoCapitalize="words"
@@ -140,6 +143,7 @@ const DonatorForm = () => {
             />
             <TextInput
                 style={styles.input}
+                placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                 placeholder="City"
                 value={city}
                 autoCapitalize="words"
@@ -149,6 +153,7 @@ const DonatorForm = () => {
                 <ProvinceSelector province={province} setProvince={setProvince} />
                 <TextInput
                     style={[styles.input, styles.flexHalf]}
+                    placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                     placeholder="Postal Code"
                     value={postal}
                     autoCapitalize="characters"
@@ -157,13 +162,14 @@ const DonatorForm = () => {
             </View>
             <TextInput
                 style={styles.input}
+                placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
                 placeholder="Email Address"
                 value={email}
                 onChangeText={setEmail}
                 keyboardType="email-address"
             />
             <TouchableOpacity onPress={handleSubmit} style={styles.submitButton}>
-                <Text style={styles.submitText}>Add User</Text>
+                <Text style={styles.submitText}>+</Text>
             </TouchableOpacity>
             <Text style={styles.errorText}>{error}</Text>
         </View>
@@ -199,20 +205,22 @@ const styles = StyleSheet.create({
     radioContainer: {
         flexDirection: "row",
         marginBottom: 20,
-        gap: 5,
+        gap: 50,
+        left:10,
     },
     radioText: {
         textAlign: "center",
         marginTop: 7,
-        marginRight: 25
+        marginRight: 25,
+        left:-50,
     },
     input: {
+        backgroundColor: "#F9F9F9",
         marginBottom: 20,
         paddingHorizontal: 10,
         height: 40,
-        borderColor: "gray",
-        borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 15,
+        fontSize: 13,
     },
     row: {
         flexDirection: "row",
@@ -223,14 +231,17 @@ const styles = StyleSheet.create({
     },
     submitButton: {
         backgroundColor: "red",
-        borderRadius: 5,
-        marginTop: 20,
+        borderRadius: 15,
+        marginTop: 50,
+        width: "20%",
+        marginLeft: "40%",
     },
     submitText: {
         color: "white",
         padding: 10,
         textAlign: "center",
         fontWeight: "bold",
+        fontSize: 30,
     },
     subtext: {
         color: "gray",
@@ -241,7 +252,8 @@ const styles = StyleSheet.create({
     },
     errorText: {
         color: "red",
-        marginTop: 10,
+        marginTop: -120,
+        marginLeft: 5,
     },
 });
 

@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     },
     amount_b: {
         width: "80%",
-        padding: 5,
+        padding: 15,
         marginVertical: 17,
         borderRadius: 15,
         justifyContent: "center",
@@ -112,7 +112,8 @@ const styles = StyleSheet.create({
     },
     name_Text: {
         color: "#000000", // Set the text color
-        fontSize: 20,
+        fontSize: 25,
+        
     },
     userList: {
         marginLeft: '15%',
