@@ -2,6 +2,7 @@ import express from "express";
 import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 import parseWashroomTimes from './parseWashroomTimes.js';
+import sampleBusinesses from "./sampleBusinesses.js";
 
 const app = express();
 const PORT = 4000;
@@ -12,6 +13,7 @@ const dbName = "GoHereDB";
 const COLLECTIONS = {
   washroomSubmissions: "Washroom Submissions",
   washrooms: "Washrooms",
+  businessAcknowledgement: "Business Acknowledgement",
 };
 
 // Connect to MongoDB
@@ -210,4 +212,12 @@ app.get("/checkAvailability/:id", express.json(), async (req, res) => {
         console.log(error.message);
         res.status(500).json({ response: error.message});
     }
+});
+
+app.get("/getBusinessAcknowledgementdemo", express.json(), async (req, res) => {
+  try {
+    res.json( { response: sampleBusinesses });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });

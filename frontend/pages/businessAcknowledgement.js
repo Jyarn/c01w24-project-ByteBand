@@ -4,6 +4,9 @@ import {
   Text,
   Image,
   StyleSheet,
+  ScrollView,
+  SafeAreaView,
+  StatusBar,
 } from "react-native";
 
 const SERVER_URL = "http://localhost:4000";
@@ -17,7 +20,7 @@ const BusinessAcknowledgement = () => {
   useEffect(() => {
     const getBusinesses = async () => {
       try {
-        await fetch(`${SERVER_URL}/getBusinesses`).then(
+        await fetch(`${SERVER_URL}/getBusinessAcknowledgementdemo`).then(
           async (response) => {
             if (!response.ok) {
               console.log("Server failed:", response.status);
@@ -42,43 +45,57 @@ const BusinessAcknowledgement = () => {
     setBusinesses(data);
   };
 
-  if (!loading) {
+  if (loading) {
     return <Text>Loading...</Text>;
   }
 
   if (!businesses) {
-    return <Text>No businesses</Text>;
+    return <Text>{businesses}</Text>;
   }
 
+  let i = 0; // temporary for generating unique keys
+
   return (
-    <View style={styles.container}>
-      {businesses.map((business) => {
-        return (
-          <View style={styles.businessContainer}>
-            <Image style={styles.businessLogo} src={business.logo}></Image>
-          </View>
-        );
-      })}
-    </View>
-  )
+    <SafeAreaView style={styles.container}>
+      <ScrollView contentContainerStyle={styles.businessList}>
+        { businesses.map((business) => {
+              return (
+                <View key={i++} style={styles.businessContainer}>
+                  <Image style={styles.businessLogo} source={{ uri: business.logo }}/>
+                </View>
+              );
+        }) }
+      </ScrollView>
+    </SafeAreaView>
+  );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20,
-    justififyContent: "center",
+    flex: 1,
+    paddingTop: StatusBar.currentHeight + 20,
   },
-  acknowledgementText: {
 
+  businessList: {
+    backgroundColor: 'pink',
+    marginHorizontal: 20,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "center",
   },
+
   businessContainer: {
-    width: 70,
-    height: 50,
-    margin: 5,
+    aspectRatio: 3/2,
+    width: "30%",
+    height: "30%",
+    margin: 4,
+    backgroundColor: "blue"
   },
+  
   businessLogo: {
-    objectFit: "contain",
-    justififyContent: "center",
+    width: "100%",
+    height: "100%",
+    resizeMode: "contain",
   },
 });
 

@@ -13,10 +13,10 @@ const App = () => {
     {/* <AddWashrooms /> */}
 
     {/* Render the uploadWashroomtime component */}
-    <UploadWashroomtime />
+    {/* <UploadWashroomtime /> */}
 
     {/* Render the uploadWashroomtime component */}
-    {/* <BusinessAcknowledgement /> */}
+    <BusinessAcknowledgement />
     </View>
   );
 };
