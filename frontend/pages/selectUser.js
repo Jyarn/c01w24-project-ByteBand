@@ -3,9 +3,9 @@ import {
     View,
     Text,
     TouchableOpacity,
+    Image,
     StyleSheet,
 } from "react-native";
-import ImageButton from "../components/imageButton";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const SelectUser = () => {
@@ -16,6 +16,18 @@ const SelectUser = () => {
         try {
             const userJSON = await AsyncStorage.getItem('users');
             return userJSON != null ? JSON.parse(userJSON) : {};
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    const deleteUser = async (name) => {
+        try {
+            if (users[name] == null) return;
+            delete users[name];
+            setUsers(users);
+            const userJSON = JSON.stringify(users);
+            await AsyncStorage.setItem('users', userJSON);
         } catch (e) {
             console.log(e);
         }
@@ -32,7 +44,7 @@ const SelectUser = () => {
 
     return (
         <View style={styles.container}>
-            <View style={{flex: 1}}>
+            <View style={{ flex: 1 }}>
                 <Text style={styles.title}>Donate Now</Text>
                 <Text style={styles.amount_title}>Choose User</Text>
                 <View style={styles.redLine} />
@@ -42,7 +54,7 @@ const SelectUser = () => {
                             <TouchableOpacity
                                 key={name}
                                 style={[
-                                    styles.amount_b,
+                                    styles.userEntry,
                                     {
                                         borderColor: selected === name ? "#EE4B2B" : "#F9F9F9",
                                         backgroundColor: "#F9F9F9",
@@ -51,15 +63,24 @@ const SelectUser = () => {
                                 onPress={() => setSelected(name)}
                             >
                                 <Text style={styles.name_Text}>{name}</Text>
+                                <Image
+                                    style={styles.icon}
+                                    source={users[name]["company"] ?
+                                        imageSource = require('../images/company.png')
+                                        : require('../images/user.png')}
+                                />
                             </TouchableOpacity>
                         ))}
+                    {Object.keys(users).length >= 4 ? <View />
+                        : <TouchableOpacity onPress={() => console.log("navigate to add user")} style={styles.addButton}>
+                            <Text style={styles.addText}>+</Text>
+                        </TouchableOpacity>}
                 </View>
             </View>
-            <ImageButton
-                onPress={() => console.log("navigate to add page")}
-                imageStyle={styles.icon}
-                imageSource={require('../images/placeholderIcon.webp')}
-            />
+            {selected == "" ? <View />
+                : <TouchableOpacity onPress={() => console.log("navigate to payment")} style={styles.submitButton}>
+                    <Text style={styles.submitText}>Pay</Text>
+                </TouchableOpacity>}
         </View>
 
 
@@ -96,29 +117,53 @@ const styles = StyleSheet.create({
     icon: {
         height: 50,
         width: 50,
-        tintColor: 'red',
-        alignSelf: 'center',
-        marginBottom: 50,
+        tintColor: '#EE4B2B',
     },
-    amount_b: {
-        width: "80%",
-        padding: 15,
-        marginVertical: 17,
-        borderRadius: 15,
-        justifyContent: "center",
+    userEntry: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: "center",
+        padding: 15,
+        borderRadius: 15,
         top: -50,
         borderWidth: 2,
     },
     name_Text: {
         color: "#000000", // Set the text color
         fontSize: 25,
-        
     },
     userList: {
-        marginLeft: '15%',
+        marginHorizontal: '5%',
         marginTop: '20%',
-    }
+        gap: 40,
+    },
+    addButton: {
+        backgroundColor: '#EE4B2B',
+        borderRadius: 15,
+        width: "20%",
+        marginLeft: "40%",
+        marginTop: -50,
+    },
+    addText: {
+        color: "white",
+        padding: 10,
+        textAlign: "center",
+        fontWeight: "bold",
+        fontSize: 30,
+    },
+    submitButton: {
+        backgroundColor: '#EE4B2B',
+        borderRadius: 15,
+        width: '40%',
+        marginLeft: "30%",
+        marginBottom: '5%',
+    },
+    submitText: {
+        color: "white",
+        padding: 10,
+        textAlign: "center",
+        fontSize: 20,
+    },
 });
 
 export default SelectUser;

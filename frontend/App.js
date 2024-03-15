@@ -11,7 +11,7 @@ const App = () => {
   return (
   <View style={{ flex: 1 }}>
     {/* Render the addWashrooms component */}
-    <SelectUser/>
+    <SelectUser />
     {/* Render the uploadWashroomtime component */}
     {/* <UploadWashroomtime /> */}
     </View>
