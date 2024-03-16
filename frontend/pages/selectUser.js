@@ -5,8 +5,10 @@ import {
     TouchableOpacity,
     Image,
     StyleSheet,
+    Alert,
 } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ImageButton from "../components/imageButton";
 
 const SelectUser = () => {
     const [users, setUsers] = useState({});
@@ -21,13 +23,27 @@ const SelectUser = () => {
         }
     }
 
+    const confirmDeletion = (name) => {
+        Alert.alert('Confirm Deletion of User', 'Are you sure you want to delete ' + name + '?',
+            [
+                {
+                    text: 'Yes',
+                    onPress: () => deleteUser(name),
+                },
+                {
+                    text: 'No',
+                    onPress: () => console.log('Delete Cancelled'),
+                },
+            ]);
+    }
+
     const deleteUser = async (name) => {
         try {
             if (users[name] == null) return;
             delete users[name];
-            setUsers(users);
             const userJSON = JSON.stringify(users);
             await AsyncStorage.setItem('users', userJSON);
+            setUsers(await getUsers());
         } catch (e) {
             console.log(e);
         }
@@ -51,25 +67,33 @@ const SelectUser = () => {
                 <View style={styles.userList}>
                     {users == {} ? <View />
                         : Object.keys(users).map((name) => (
-                            <TouchableOpacity
-                                key={name}
-                                style={[
-                                    styles.userEntry,
-                                    {
-                                        borderColor: selected === name ? "#EE4B2B" : "#F9F9F9",
-                                        backgroundColor: "#F9F9F9",
-                                    },
-                                ]}
-                                onPress={() => setSelected(name)}
-                            >
-                                <Text style={styles.name_Text}>{name}</Text>
-                                <Image
-                                    style={styles.icon}
-                                    source={users[name]["company"] ?
-                                        imageSource = require('../images/company.png')
-                                        : require('../images/user.png')}
+                            <View style={styles.userEntry}>
+                                <TouchableOpacity
+                                    key={name}
+                                    style={[
+                                        styles.userButton,
+                                        {
+                                            borderColor: selected === name ? "#EE4B2B" : "#F9F9F9",
+                                            backgroundColor: "#F9F9F9",
+                                        },
+                                    ]}
+                                    onPress={() => setSelected(name)}
+                                >
+                                    <Text style={styles.name_Text}>{name}</Text>
+                                    <Image
+                                        style={styles.icon}
+                                        source={users[name]["company"] ?
+                                            imageSource = require('../images/company.png')
+                                            : require('../images/user.png')}
+                                    />
+                                </TouchableOpacity>
+                                <ImageButton
+                                    key={name + "Delete"}
+                                    onPress={() => confirmDeletion(name)}
+                                    imageStyle={{ height: 50, width: 50, marginTop: -15 }}
+                                    imageSource={require('../images/delete.png')}
                                 />
-                            </TouchableOpacity>
+                            </View>
                         ))}
                     {Object.keys(users).length >= 4 ? <View />
                         : <TouchableOpacity onPress={() => console.log("navigate to add user")} style={styles.addButton}>
@@ -82,8 +106,6 @@ const SelectUser = () => {
                     <Text style={styles.submitText}>Pay</Text>
                 </TouchableOpacity>}
         </View>
-
-
     );
 };
 
@@ -120,6 +142,11 @@ const styles = StyleSheet.create({
         tintColor: '#EE4B2B',
     },
     userEntry: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    userButton: {
+        width: '75%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: "center",
