@@ -5,32 +5,59 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  ActivityIndicator,
 } from "react-native";
-import Prismic from "@prismicio/client";
-import { Client } from "./prismic-configuration"; // Adjust this import to  Prismic configuration file's actual path
 
-// Function to fetch news updates from Prismic 
-const fetchNewsUpdatesFromPrismic = async () => {
-  try {
-    const response = await Client.query(
-      [Prismic.Predicates.at("document.type", "news_article")],
-      { pageSize: 100 }
-    ); // Adjust query as needed
+// this is a placeholder and can be replaced with prismic
 
-    if (response) {
-      return response.results.map((doc) => ({
-        id: doc.id,
-        headline: doc.data.headline[0].text, // Adjust according to  document structure
-        summary: doc.data.summary[0].text, // Adjust according to  document structure
-        timestamp: doc.first_publication_date,
-        content: doc.data.content[0].text, // Adjust according to your document structure
-      }));
-    }
-  } catch (error) {
-    console.error("Error fetching news from Prismic:", error);
-    return []; // Return an empty array as a fallback
-  }
+const fetchNewsUpdates = async () => {
+ 
+  return [
+    {
+      id: "1",
+      headline: "News Item 1",
+      summary: "Summary of news item 1...",
+      timestamp: "2024-03-15T12:00:00Z",
+      content: "Full content of news item 1...",
+    },
+    {
+      id: "2",
+      headline: "News Item 2",
+      summary: "Summary of news item 2...",
+      timestamp: "2024-03-15T12:00:00Z",
+      content: "Full content of news item 2...",
+    },
+
+    {
+      id: "3",
+      headline: "News Item 3",
+      summary: "Summary of news item 3...",
+      timestamp: "2024-03-15T12:00:00Z",
+      content: "Full content of news item 3...",
+    },
+    {
+      id: "4",
+      headline: "News Item 4",
+      summary: "Summary of news item 4...",
+      timestamp: "2024-03-15T12:00:00Z",
+      content: "Full content of news item 4...",
+    },
+    {
+      id: "5",
+      headline: "News Item 5",
+      summary: "Summary of news item 5...",
+      timestamp: "2024-03-15T12:00:00Z",
+      content: "Full content of news item 5...",
+    },
+
+    {
+      id: "6",
+      headline: "News Item 6",
+      summary: "Summary of news item 6...",
+      timestamp: "2024-03-15T12:00:00Z",
+      content: "Full content of news item 6...",
+    },
+    // Add more news items here...
+  ];
 };
 
 const NewsCard = ({ news, onPress }) => (
@@ -45,29 +72,23 @@ const NewsCard = ({ news, onPress }) => (
 
 const News = () => {
   const [newsUpdates, setNewsUpdates] = useState([]);
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const getNewsFromPrismic = async () => {
-      const newsData = await fetchNewsUpdatesFromPrismic();
+    const getNews = async () => {
+      const newsData = await fetchNewsUpdates();
       setNewsUpdates(newsData);
-      setLoading(false);
     };
-
-    getNewsFromPrismic();
+    getNews();
   }, []);
 
   const handlePress = (news) => {
-    alert(news.content); // Replace with your navigation logic 
+    
+    alert(news.content); // Replace with  navigation logic 
   };
 
   const renderItem = ({ item }) => (
     <NewsCard news={item} onPress={() => handlePress(item)} />
   );
-
-  if (loading) {
-    return <ActivityIndicator style={styles.loader} />;
-  }
 
   return (
     <FlatList
@@ -110,9 +131,6 @@ const styles = StyleSheet.create({
     fontSize: 12,
     color: "gray",
     marginTop: 10,
-  },
-  loader: {
-    marginTop: 50,
   },
 });
 
