@@ -15,7 +15,7 @@ export default NavBar = ({ navigation }) => {
                 imageSource={require('../images/placeholderIcon.webp')} 
             />
             <ImageButton
-                onPress={() => console.log("Placeholder")}
+                onPress={() => navigation.navigate('SelectUser')}
                 imageStyle={styles.icon}
                 imageSource={require('../images/placeholderIcon.webp')}
             />

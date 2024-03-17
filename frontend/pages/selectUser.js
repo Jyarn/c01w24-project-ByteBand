@@ -10,7 +10,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageButton from "../components/imageButton";
 
-const SelectUser = () => {
+const SelectUser = ({navigation}) => {
     const [users, setUsers] = useState({});
     const [selected, setSelected] = useState("");
 
@@ -52,8 +52,6 @@ const SelectUser = () => {
     useEffect(() => {
         const loadUsers = async () => {
             setUsers(await getUsers());
-            console.log(users);
-            console.log(Object.keys(users));
         }
         loadUsers();
     }, []);
@@ -96,13 +94,13 @@ const SelectUser = () => {
                             </View>
                         ))}
                     {Object.keys(users).length >= 4 ? <View />
-                        : <TouchableOpacity onPress={() => console.log("navigate to add user")} style={styles.addButton}>
+                        : <TouchableOpacity onPress={() => navigation.navigate('DonatorForm')} style={styles.addButton}>
                             <Text style={styles.addText}>+</Text>
                         </TouchableOpacity>}
                 </View>
             </View>
             {selected == "" ? <View />
-                : <TouchableOpacity onPress={() => console.log("navigate to payment")} style={styles.submitButton}>
+                : <TouchableOpacity onPress={() => navigation.navigate('Donation')} style={styles.submitButton}>
                     <Text style={styles.submitText}>Pay</Text>
                 </TouchableOpacity>}
         </View>

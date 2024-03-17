@@ -20,7 +20,7 @@ const App = () => {
         <Stack.Screen
           name="Home"
           component={HomeScreen}
-          options={{ title: "test", headerShown: false }}
+          options={{headerShown: false }}
         />
         <Stack.Screen
           name="WashroomUpload"
@@ -30,6 +30,21 @@ const App = () => {
         <Stack.Screen
           name="WashroomTimes"
           component={UploadWashroomtime}
+        />
+        <Stack.Screen
+          name="SelectUser"
+          component={SelectUser}
+          options={{headerShown: false }}
+        />
+        <Stack.Screen
+          name="DonatorForm"
+          component={DonatorForm}
+          options={{headerShown: false }}
+        />
+        <Stack.Screen
+          name="Donation"
+          component={Donation}
+          options={{headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>
