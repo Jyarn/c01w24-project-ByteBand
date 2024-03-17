@@ -1,8 +1,11 @@
 
 import React from "react";
 
-import AddWashrooms from "./pages/addWashrooms";
+import DonatorForm from "./pages/donatorForm";
+import Donation from "./pages/Donation";
 import UploadWashroomtime from "./pages/uploadWashroomtime";
+import AddWashrooms from "./pages/addWashrooms";
+import SelectUser from "./pages/selectUser";
 import HomeScreen from "./pages/homeScreen";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
