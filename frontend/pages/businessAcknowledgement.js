@@ -7,11 +7,9 @@ import {
   StatusBar,
 } from "react-native";
 import BusinessLogo from "../components/businessLogo";
-
-const SERVER_URL = "http://localhost:4000";
+import { Client } from "../prismic.js";
 
 const BusinessAcknowledgement = () => {
-  // Get acknowledged businesses from backend
 
   const [loading, setLoading] = useState(true);
   const [businesses, setBusinesses] = useState(undefined);
@@ -19,19 +17,15 @@ const BusinessAcknowledgement = () => {
   useEffect(() => {
     const getBusinesses = async () => {
       try {
-        await fetch(`${SERVER_URL}/getBusinessAcknowledgementdemo`).then(
-          async (response) => {
-            if (!response.ok) {
-              console.log("Server failed:", response.status);
-            } else {
-              await response.json().then((data) => {
-                getBusinessState(data.response);
-              });
-            }
+        Client.getSingle("business_acknowledgement").then((doc) => {
+          let businesses = [];
+          for (const business of doc.data.businesses) {
+            businesses.push({ id: business.logo.id, logo: business.logo.url })
           }
-        );
+          getBusinessState(businesses);
+        });
       } catch (error) {
-        console.log("Fetch function failed:", error);
+        console.log("Could not find document");
       } finally {
         setLoading(false);
       }
@@ -49,17 +43,15 @@ const BusinessAcknowledgement = () => {
   }
 
   if (!businesses) {
-    return <Text>{businesses}</Text>;
+    return <Text>No businesses found</Text>
   }
-
-  let i = 0; // temporary for generating unique keys
 
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Acknowledgements</Text>
       <ScrollView contentContainerStyle={styles.businessList}>
         { businesses.map((business) => {
-          return <BusinessLogo business={i++} logo={business.logo} />
+          return <BusinessLogo key={business.id} logo={business.logo} />
         }) }
       </ScrollView>
     </View>
@@ -75,7 +67,7 @@ const styles = StyleSheet.create({
   heading: {
     alignSelf: "center",
     fontWeight: "bold",
-    fontSize: 30,
+    fontSize: 25,
     paddingVertical: "4%",
   },
 

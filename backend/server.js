@@ -213,11 +213,3 @@ app.get("/checkAvailability/:id", express.json(), async (req, res) => {
         res.status(500).json({ response: error.message});
     }
 });
-
-app.get("/getBusinessAcknowledgementdemo", express.json(), async (req, res) => {
-  try {
-    res.json( { response: sampleBusinesses });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});

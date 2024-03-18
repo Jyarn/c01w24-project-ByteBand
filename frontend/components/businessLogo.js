@@ -4,9 +4,9 @@ import {
   StyleSheet,
 } from "react-native";
 
-const BusinessLogo = ({ business, logo }) => {
+const BusinessLogo = ({ logo }) => {
   return (
-    <View key={business} style={styles.businessContainer}>
+    <View style={styles.businessContainer}>
       <Image style={styles.businessLogo} source={{ uri: logo }}/>
     </View>
   );
