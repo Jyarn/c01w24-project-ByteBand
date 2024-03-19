@@ -6,25 +6,26 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  ScrollView
 } from "react-native";
-import Prismic from "@prismicio/client";
-import { Client } from "./prismic-configuration"; // Adjust this import to  Prismic configuration file's actual path
 
-// Function to fetch news updates from Prismic 
+import * as prismic from '@prismicio/client'
+import { Client } from "../prismic.js"; // Adjust this import to  Prismic configuration file's actual path
+import NewsViewer from "../components/newsArticle"
+
+// Function to fetch news updates from Prismic
 const fetchNewsUpdatesFromPrismic = async () => {
   try {
-    const response = await Client.query(
-      [Prismic.Predicates.at("document.type", "news_article")],
-      { pageSize: 100 }
-    ); // Adjust query as needed
+    const res = await Client.getByType('summarypage');
+    console.log(res);
 
-    if (response) {
-      return response.results.map((doc) => ({
+    if (res) {
+      return res.results.map((doc) => ({
         id: doc.id,
-        headline: doc.data.headline[0].text, // Adjust according to  document structure
-        summary: doc.data.summary[0].text, // Adjust according to  document structure
+        headline: prismic.asText(doc.data.title),
+        summary: prismic.asText(doc.data.summary),
         timestamp: doc.first_publication_date,
-        content: doc.data.content[0].text, // Adjust according to your document structure
+        uid: doc.data.article.uid,
       }));
     }
   } catch (error) {
@@ -32,6 +33,7 @@ const fetchNewsUpdatesFromPrismic = async () => {
     return []; // Return an empty array as a fallback
   }
 };
+
 
 const NewsCard = ({ news, onPress }) => (
   <TouchableOpacity style={styles.card} onPress={onPress}>
