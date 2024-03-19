@@ -45,9 +45,11 @@ const NewsCard = ({ news, onPress }) => (
   </TouchableOpacity>
 );
 
+
 const News = () => {
   const [newsUpdates, setNewsUpdates] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [uid, setuid] = useState(null);
 
   useEffect(() => {
     const getNewsFromPrismic = async () => {
@@ -60,7 +62,7 @@ const News = () => {
   }, []);
 
   const handlePress = (news) => {
-    alert(news.content); // Replace with your navigation logic 
+    setuid(news.uid);
   };
 
   const renderItem = ({ item }) => (
@@ -72,17 +74,55 @@ const News = () => {
   }
 
   return (
+    uid === null ?
     <FlatList
       data={newsUpdates}
       renderItem={renderItem}
       keyExtractor={(item) => item.id}
       style={styles.container}
     />
+    :
+    <View style={styles.container}>
+      <TouchableOpacity
+        style={newsStyles.goBackButton}
+        onPress={() => setuid(null)}>
+        <Text style={newsStyles.goBackText}>Go Back</Text>
+      </TouchableOpacity>
+      <ScrollView style={newsStyles.newscontainer}>
+        <NewsViewer uid={uid}/>
+      </ScrollView>
+    </View>
   );
 };
 
+const newsStyles = StyleSheet.create({
+  newscontainer: {
+    backgroundColor: "#fff",
+    borderRadius: 10,
+    padding: 20,
+    paddingTop: 4,
+    marginTop: 5,
+    marginBottom: 8,
+    marginHorizontal: 8,
+  },
+  goBackButton: {
+    marginTop: 8,
+    marginLeft: 15,
+    textAlign: "center",
+    borderWidth: 1,
+    borderRadius: 5,
+    width: 80,
+  },
+  goBackText: {
+    padding: 5,
+    fontSize: 18,
+    fontWeight: "bold",
+  }
+});
+
 const styles = StyleSheet.create({
   container: {
+    marginTop: 36,
     flex: 1,
   },
   card: {
