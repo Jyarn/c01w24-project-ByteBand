@@ -1,44 +1,37 @@
 import { Client } from "../prismic.js";
 import * as prismic from '@prismicio/client'
-import { WebView } from "react-native-webview";
-import { StyleSheet, View, Text } from "react-native";
+import { StyleSheet, ScrollView, View, Text, useWindowDimensions } from "react-native";
 import React, { useEffect, useState } from "react";
+import RenderHtml from 'react-native-render-html';
 
-class NewsArticle extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: "",
-      title: "<h1>Loading...</h1>",
-    }
-  }
+const NewsArticle = ({ uid }) => {
+  const [source, setSource] = useState("<h1>Loading...</h1>");
+  const { width } = useWindowDimensions();
 
-  componentDidMount() {
-    try {
-      Client.getByUID("news_article", this.props.uid).then((doc) => {
-        this.setState({
-          text: prismic.asHTML(doc.data.maintext),
-          title: prismic.asHTML(doc.data.articleheading),
-        })
-      });
+  useEffect(() => {
+    const fetchArticle = async () => {
+      try {
+        Client.getByUID("news_article", uid).then((doc) => {
+          const temp = `<div>${prismic.asHTML(doc.data.articleheading)}</div>
+            <div>${prismic.asHTML(doc.data.maintext)}</div>
+            <p>----</p>`;
+          setSource(temp);
+        });
+      } catch(err) {
+        console.log(err);
+        throw err;
+      }
+    };
 
-    } catch (err) {
-      throw err;
-    }
-  }
+    fetchArticle();
+  }, []);
 
-  render() {
-    console.log(this.state.text);
-    let htmlacc = `<div>${this.state.title}</div>`;
-    htmlacc = `${htmlacc}<div>${this.state.text}</div>`;
-
-    return (
-        <WebView
-          source={{html: htmlacc}}
-          scalesPageToFit={false}
-        />
-    );
-  }
+  return (
+    <RenderHtml
+    contentWidth={width}
+    source={{html: source}}
+    />
+  );
 }
 
 export default NewsArticle;
