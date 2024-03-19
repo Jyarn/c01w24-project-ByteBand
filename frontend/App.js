@@ -4,6 +4,7 @@ import { View } from "react-native";
 import AddWashrooms from "./pages/addWashrooms";
 import UploadWashroomtime from "./pages/uploadWashroomtime";
 import NewsArticle from "./components/newsArticle"
+import News from "./pages/news"
 
 const App = () => {
   return (
@@ -16,7 +17,7 @@ const App = () => {
     {/* <UploadWashroomtime /> */}
 
     {/* Render news article component */}
-    <NewsArticle uid={"testarticle1"}/>
+    <News/>
     </View>
   );
 };
