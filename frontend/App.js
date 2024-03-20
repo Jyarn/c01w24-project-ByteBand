@@ -1,4 +1,3 @@
-
 import React from "react";
 
 import DonatorForm from "./pages/donatorForm";
