@@ -6,8 +6,9 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
+import ImageButton from "../components/imageButton";
 
-const Donation = () => {
+const Donation = ({ navigation }) => {
   const [selectedAmount, setSelectedAmount] = useState(null);
   const [customAmount, setCustomAmount] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -31,12 +32,19 @@ const Donation = () => {
       alert("Please select or enter a valid amount");
       return;
     }
-    alert(`${donationAmount} Donated`);
+    navigation.navigate('SelectUser');
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Donate Now</Text>
+      <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', marginTop: 40, marginRight: '25%' }}>
+        <ImageButton
+          onPress={() => navigation.navigate('Home')}
+          imageStyle={{ height: 30, width: 30 }}
+          imageSource={require('../images/back.png')}
+        />
+        <Text style={styles.title}>Donate Now</Text>
+      </View>
       <Text style={styles.amount_title}>Donation Amount</Text>
       <Text style={styles.other_title}>Other Amount</Text>
       <View style={styles.redLine}></View>
@@ -58,7 +66,7 @@ const Donation = () => {
       ))}
 
       <TextInput
-        style={[styles.other_b, styles.other_position, styles.other_Text,{color: 'rgba(0, 0, 0, 0.5)'}]}
+        style={[styles.other_b, styles.other_position, styles.other_Text, { color: 'rgba(0, 0, 0, 0.5)' }]}
         placeholder="Enter Your Donation Amount"
         value={customAmount}
         onChangeText={(text) => {
@@ -68,7 +76,7 @@ const Donation = () => {
         keyboardType="numeric"
         onFocus={() => {
           setIsFocused(true);
-          setSelectedAmount(null); 
+          setSelectedAmount(null);
         }}
         onBlur={() => setIsFocused(false)}
       />
@@ -85,7 +93,7 @@ const Donation = () => {
 
 const styles = StyleSheet.create({
   other_title: {
-    
+
     top: 280, // Align to the top of the container
     left: -110, // Align to the left of the container
     fontSize: 17,
@@ -94,7 +102,7 @@ const styles = StyleSheet.create({
   },
   amount_title: {
     top: 0, // Align to the top of the container
-    left:-100, // Align to the left of the container
+    left: -100, // Align to the left of the container
     fontSize: 17,
     color: "#000000",
     margin: 10, // Add a little space from the top and left edges
@@ -118,16 +126,17 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    top: 0, // Align to the top of the container
+    top: 10,
     left: "center", // Align to the left of the container
     fontSize: 30,
     color: "#000000",
-    margin: 10, // Add a little space from the top and left edges
-    
+    marginLeft: '20%',
+    marginBottom: 15,
+    alignSelf: 'center',
+    textAlignVertical: 'center',
   },
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
     padding: 20,
   },

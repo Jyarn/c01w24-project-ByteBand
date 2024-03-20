@@ -15,12 +15,12 @@ export default NavBar = ({ navigation }) => {
                 imageSource={require('../images/schedule.png')} 
             />
             <ImageButton
-                onPress={() => navigation.navigate('SelectUser')}
+                onPress={() => navigation.navigate('Donation')}
                 imageStyle={styles.icon}
                 imageSource={require('../images/donation.png')}
             />
             <ImageButton
-                onPress={() => console.log("Placeholder")}
+                onPress={() => navigation.navigate('BusinessAck')}
                 imageStyle={styles.icon}
                 imageSource={require('../images/sponsor.png')}
             />

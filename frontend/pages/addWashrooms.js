@@ -8,10 +8,11 @@ import {
 } from "react-native";
 import { RadioButton } from 'react-native-paper';
 import ProvinceSelector from '../components/provinceSelector'
+import ImageButton from "../components/imageButton";
 
 const SERVER_URL = "http://localhost:4000";
 
-const AddWashrooms = () => {
+const AddWashrooms = ({ navigation }) => {
   const [isUser, setIsUser] = useState("User");
   const [locationName, setLocationName] = useState("");
   const [address, setAddress] = useState("");
@@ -39,7 +40,7 @@ const AddWashrooms = () => {
     if (!postal.match(/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ ]?\d[ABCEGHJ-NPRSTV-Z]\d$/i)) {
       setError("Please Enter a valid Postal Code");
       return;
-  }
+    }
 
     // check if email is of valid format
     if (!email.toLowerCase().match(
@@ -78,7 +79,14 @@ const AddWashrooms = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Location Info</Text>
+      <View style={{flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 20}}>
+        <ImageButton
+          onPress={() => navigation.navigate('Home')}
+          imageStyle={{ height: 20, width: 20 }}
+          imageSource={require('../images/back.png')}
+        />
+        <Text style={styles.header}>Suggest a New Washroom</Text>
+      </View>
       <View style={styles.radioContainer}>
         <RadioButton
           value="User"
@@ -155,6 +163,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 18,
     marginBottom: 10,
+    marginTop: 10,
   },
   radioContainer: {
     flexDirection: "row",

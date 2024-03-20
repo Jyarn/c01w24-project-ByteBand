@@ -8,8 +8,9 @@ import {
 } from "react-native";
 import BusinessLogo from "../components/businessLogo";
 import { Client } from "../prismic.js";
+import ImageButton from "../components/imageButton.js";
 
-const BusinessAcknowledgement = () => {
+const BusinessAcknowledgement = ({ navigation }) => {
 
   const [loading, setLoading] = useState(true);
   const [businesses, setBusinesses] = useState(undefined);
@@ -48,11 +49,18 @@ const BusinessAcknowledgement = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Acknowledgements</Text>
+      <View style={{flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 20, marginLeft: 20}}>
+        <ImageButton
+          onPress={() => navigation.navigate('Home')}
+          imageStyle={{ height: 30, width: 30}}
+          imageSource={require('../images/back.png')}
+        />
+        <Text style={styles.heading}>Acknowledgements</Text>
+      </View>
       <ScrollView contentContainerStyle={styles.businessList}>
-        { businesses.map((business) => {
+        {businesses.map((business) => {
           return <BusinessLogo key={business.id} logo={business.logo} />
-        }) }
+        })}
       </ScrollView>
     </View>
   );
@@ -69,6 +77,8 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 25,
     paddingVertical: "4%",
+    textAlignVertical: 'center',
+    marginLeft: '5%',
   },
 
   businessList: {

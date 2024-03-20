@@ -26,7 +26,7 @@ const App = () => {
         <Stack.Screen
           name="WashroomUpload"
           component={AddWashrooms}
-          options={{ title: "Suggest a new Washroom" }}
+          options={{headerShown: false }}
         />
         <Stack.Screen
           name="WashroomTimes"
@@ -35,17 +35,22 @@ const App = () => {
         <Stack.Screen
           name="SelectUser"
           component={SelectUser}
-          options={{ title: "Donate Now" }}
+          options={{headerShown: false }}
         />
         <Stack.Screen
           name="DonatorForm"
           component={DonatorForm}
-          options={{ title: "Donate Now" }}
+          options={{headerShown: false }}
         />
         <Stack.Screen
           name="Donation"
           component={Donation}
-          options={{ title: "Donate Now" }}
+          options={{headerShown: false }}
+        />
+        <Stack.Screen
+          name="BusinessAck"
+          component={BusinessAcknowledgement}
+          options={{headerShown: false }}
         />
       </Stack.Navigator>
     </NavigationContainer>

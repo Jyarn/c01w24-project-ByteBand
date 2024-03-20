@@ -10,7 +10,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageButton from "../components/imageButton";
 
-const SelectUser = ({navigation}) => {
+const SelectUser = ({ navigation }) => {
     const [users, setUsers] = useState({});
     const [selected, setSelected] = useState("");
 
@@ -59,13 +59,20 @@ const SelectUser = ({navigation}) => {
     return (
         <View style={styles.container}>
             <View style={{ flex: 1 }}>
-                <Text style={styles.title}>Donate Now</Text>
+                <View style={{flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 20}}>
+                    <ImageButton
+                        onPress={() => navigation.navigate('Donation')}
+                        imageStyle={{ height: 30, width: 30 }}
+                        imageSource={require('../images/back.png')}
+                    />
+                    <Text style={styles.title}>Donate Now</Text>
+                </View>
                 <Text style={styles.amount_title}>Choose User</Text>
                 <View style={styles.redLine} />
                 <View style={styles.userList}>
                     {users == {} ? <View />
                         : Object.keys(users).map((name) => (
-                            <View key={name + "View"}style={styles.userEntry}>
+                            <View key={name + "View"} style={styles.userEntry}>
                                 <TouchableOpacity
                                     style={[
                                         styles.userButton,
@@ -98,7 +105,7 @@ const SelectUser = ({navigation}) => {
                 </View>
             </View>
             {selected == "" ? <View />
-                : <TouchableOpacity onPress={() => navigation.navigate('Donation')} style={styles.submitButton}>
+                : <TouchableOpacity onPress={() => console.log("Go to payment info")} style={styles.submitButton}>
                     <Text style={styles.submitText}>Pay</Text>
                 </TouchableOpacity>}
         </View>
@@ -129,8 +136,10 @@ const styles = StyleSheet.create({
         left: "center", // Align to the left of the container
         fontSize: 30,
         color: "#000000",
-        margin: 10, // Add a little space from the top and left edges
+        marginLeft: '15%',
+        marginBottom: 15,
         alignSelf: 'center',
+        textAlignVertical: 'center',
     },
     icon: {
         height: 50,
