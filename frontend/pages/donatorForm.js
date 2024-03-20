@@ -53,19 +53,7 @@ const DonatorForm = () => {
         }
 
         // check for valid postal codes
-        if (postal.length != 6) {
-            setError("Please Enter a valid Postal Code");
-            return;
-        }
-        // check that all odd characters are letters
-        if (!(postal[0].match(/[a-z]/i) && postal[2].match(/[a-z]/i)
-            && postal[4].match(/[a-z]/i))) {
-            setError("Please Enter a valid Postal Code");
-            return;
-        }
-        // check that all even characters are numbers
-        if (!(postal[1].match(/^\d$/) && postal[3].match(/^\d$/)
-            && postal[5].match(/^\d$/))) {
+        if (!postal.match(/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ ]?\d[ABCEGHJ-NPRSTV-Z]\d$/i)) {
             setError("Please Enter a valid Postal Code");
             return;
         }
@@ -85,7 +73,7 @@ const DonatorForm = () => {
             "address": address,
             "city": city,
             "province": province,
-            "postal": postal,
+            "postal": postal.replace(/\s/g, ""),
             "email": email
         }
         const users = await getUsers();

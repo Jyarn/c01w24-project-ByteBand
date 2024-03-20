@@ -65,9 +65,8 @@ const SelectUser = ({navigation}) => {
                 <View style={styles.userList}>
                     {users == {} ? <View />
                         : Object.keys(users).map((name) => (
-                            <View style={styles.userEntry}>
+                            <View key={name + "View"}style={styles.userEntry}>
                                 <TouchableOpacity
-                                    key={name}
                                     style={[
                                         styles.userButton,
                                         {
@@ -86,7 +85,6 @@ const SelectUser = ({navigation}) => {
                                     />
                                 </TouchableOpacity>
                                 <ImageButton
-                                    key={name + "Delete"}
                                     onPress={() => confirmDeletion(name)}
                                     imageStyle={{ height: 50, width: 50, marginTop: -15 }}
                                     imageSource={require('../images/delete.png')}
