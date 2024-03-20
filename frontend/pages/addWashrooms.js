@@ -7,10 +7,9 @@ import {
   StyleSheet,
 } from "react-native";
 import { RadioButton } from 'react-native-paper';
-import ProvinceSelector from '../components/provinceSelector'
+import { SERVER_URL } from "../constants/constants";
+import ProvinceSelector from "../components/provinceSelector";
 import ImageButton from "../components/imageButton";
-
-const SERVER_URL = "http://localhost:4000";
 
 const AddWashrooms = ({ navigation }) => {
   const [isUser, setIsUser] = useState("User");

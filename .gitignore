@@ -4,5 +4,8 @@ node_modules/
 # Database
 data/
 
+# Constants
+constants
+
 # Misc
 .DS_Store
