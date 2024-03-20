@@ -7,6 +7,8 @@ import BusinessAcknowledgement from "./pages/businessAcknowledgement";
 import AddWashrooms from "./pages/addWashrooms";
 import SelectUser from "./pages/selectUser";
 import HomeScreen from "./pages/homeScreen";
+import AddRatings from "./pages/addRatings";
+import DisplayRatings from "./pages/displayRatings";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
