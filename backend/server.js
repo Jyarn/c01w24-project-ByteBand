@@ -242,3 +242,24 @@ app.patch("/postRating/:washroomId", express.json(), async (req, res) => {
       res.status(500).json({ error: error.message });
     }
 });
+
+app.get("/getRating/:washroomId", express.json(), async (req, res) => {
+    try {
+      // check if washroom ID is valid
+      const washroomId = req.params.washroomId;
+      if (!ObjectId.isValid(washroomId)) {
+        return res.status(400).json({ error: "Invalid washroom ID." });
+      }
+  
+      // find the washroom by ID
+      const collection = db.collection(COLLECTIONS.washroomSubmissions);
+      const washroom = await collection.findOne({ _id: new ObjectId(washroomId) });
+  
+      if (!washroom) {
+        return res.status(404).json({ error: "Washroom not found." });
+      }
+      res.status(200).json({ ratings: washroom.ratings });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+});
