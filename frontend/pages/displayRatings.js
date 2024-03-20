@@ -29,6 +29,7 @@ const DisplayRatings = ({ washroomId }) => {
         <View key={index} style={styles.rating}>
         {/* <Text style={styles.ratingText}>Rating: {rating.rating} Stars</Text> */}
         <Text style={styles.feedbackText}>Feedback: {rating.feedback}</Text>
+        <Text style={styles.feedbackText}>Date: {rating.date}</Text>
         </View>
     ))}
     </View>
