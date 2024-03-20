@@ -2,7 +2,6 @@ import express from "express";
 import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
 import parseWashroomTimes from './parseWashroomTimes.js';
-import sampleBusinesses from "./sampleBusinesses.js";
 
 const app = express();
 const PORT = 4000;
