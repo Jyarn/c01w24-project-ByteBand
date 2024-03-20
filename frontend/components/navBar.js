@@ -25,7 +25,7 @@ export default NavBar = ({ navigation }) => {
                 imageSource={require('../images/sponsor.png')}
             />
             <ImageButton
-                onPress={() => console.log("Placeholder")}
+                onPress={() => navigation.navigate('Ratings')}
                 imageStyle={styles.icon}
                 imageSource={require('../images/rating.png')}
             />

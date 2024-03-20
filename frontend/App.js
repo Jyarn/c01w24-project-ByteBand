@@ -1,4 +1,3 @@
-
 import React from "react";
 
 import DonatorForm from "./pages/donatorForm";
@@ -8,6 +7,8 @@ import BusinessAcknowledgement from "./pages/businessAcknowledgement";
 import AddWashrooms from "./pages/addWashrooms";
 import SelectUser from "./pages/selectUser";
 import HomeScreen from "./pages/homeScreen";
+import Ratings from "./pages/ratings";
+import News from "./pages/news";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -51,6 +52,14 @@ const App = () => {
           name="BusinessAck"
           component={BusinessAcknowledgement}
           options={{headerShown: false }}
+        />
+        <Stack.Screen
+          name="Ratings"
+          component={Ratings}
+        />
+        <Stack.Screen
+          name="News"
+          component={News}
         />
       </Stack.Navigator>
     </NavigationContainer>

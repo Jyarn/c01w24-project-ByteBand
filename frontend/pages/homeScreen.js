@@ -33,7 +33,7 @@ export default HomeScreen = ({navigation}) => {
           value={searchLocation}
           onChangeText={setSearchLocation}
         />
-        <TouchableOpacity onPress={()=> Alert.alert("Covid Alert", "Covid was bad")} style={styles.announcement}>
+        <TouchableOpacity onPress={()=> navigation.navigate('News')} style={styles.announcement}>
           <Text style={styles.announcementText}>Announcements</Text>
         </TouchableOpacity>
       </View>
