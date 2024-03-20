@@ -4,6 +4,7 @@ import React from "react";
 import DonatorForm from "./pages/donatorForm";
 import Donation from "./pages/Donation";
 import UploadWashroomtime from "./pages/uploadWashroomtime";
+import BusinessAcknowledgement from "./pages/businessAcknowledgement";
 import AddWashrooms from "./pages/addWashrooms";
 import SelectUser from "./pages/selectUser";
 import HomeScreen from "./pages/homeScreen";
