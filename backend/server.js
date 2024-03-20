@@ -12,16 +12,6 @@ import {
 } from "./constants/constants.js";
 
 const app = express();
-const PORT = 4000;
-const mongoURL = "mongodb://127.0.0.1:27017";
-const dbName = "GoHereDB";
-
-// Database collection names
-const COLLECTIONS = {
-  washroomSubmissions: "Washroom Submissions",
-  washrooms: "Washrooms",
-  businessAcknowledgement: "Business Acknowledgement",
-};
 
 // Connect to MongoDB
 let db;
