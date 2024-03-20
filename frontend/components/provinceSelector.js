@@ -29,16 +29,16 @@ export default ProvinceSelector;
 
 const styles = StyleSheet.create({
     dropdown: {
+        backgroundColor: "#F9F9F9",
         marginBottom: 20,
         paddingHorizontal: 10,
         height: 40,
-        borderColor: "gray",
-        borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 15,
         width: "48%",
     },
     placeholderText: {
-        color: "gray"
+        color:'rgba(0, 0, 0, 0.5)',
+        fontSize:13,
     },
     selectedText: {
         numberOfLines: 1

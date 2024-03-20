@@ -7,7 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 
-const uploadWashroomtime = () => {
+const UploadWashroomtime = () => {
   // Get schedule from backend
 
   const [reason, setReason] = useState("");
@@ -193,4 +193,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default uploadWashroomtime;
+export default UploadWashroomtime;

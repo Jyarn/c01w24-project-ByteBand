@@ -12,6 +12,7 @@ const dbName = "GoHereDB";
 const COLLECTIONS = {
   washroomSubmissions: "Washroom Submissions",
   washrooms: "Washrooms",
+  businessAcknowledgement: "Business Acknowledgement",
 };
 
 // Connect to MongoDB

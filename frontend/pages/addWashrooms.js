@@ -11,7 +11,7 @@ import ProvinceSelector from '../components/provinceSelector'
 
 const SERVER_URL = "http://localhost:4000";
 
-const addWashrooms = () => {
+const AddWashrooms = () => {
   const [isUser, setIsUser] = useState("User");
   const [locationName, setLocationName] = useState("");
   const [address, setAddress] = useState("");
@@ -36,22 +36,10 @@ const addWashrooms = () => {
     }
 
     // check for valid postal codes
-    if (postal.length != 6) {
+    if (!postal.match(/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ ]?\d[ABCEGHJ-NPRSTV-Z]\d$/i)) {
       setError("Please Enter a valid Postal Code");
       return;
-    }
-    // check that all odd characters are letters
-    if (!(postal[0].match(/[a-z]/i) && postal[2].match(/[a-z]/i)
-      && postal[4].match(/[a-z]/i))) {
-      setError("Please Enter a valid Postal Code");
-      return;
-    }
-    // check that all even characters are numbers
-    if (!(postal[1].match(/^\d$/) && postal[3].match(/^\d$/)
-      && postal[5].match(/^\d$/))) {
-      setError("Please Enter a valid Postal Code");
-      return;
-    }
+  }
 
     // check if email is of valid format
     if (!email.toLowerCase().match(
@@ -74,7 +62,7 @@ const addWashrooms = () => {
         address: address,
         city: city,
         province: province,
-        postal: postal,
+        postal: postal.replace(/\s/g, ""),
         email: email,
       }),
     });
@@ -160,7 +148,6 @@ const addWashrooms = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
     padding: 20,
     justifyContent: "center",
   },
@@ -218,4 +205,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default addWashrooms;
+export default AddWashrooms;
