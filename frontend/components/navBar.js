@@ -7,27 +7,27 @@ export default NavBar = ({ navigation }) => {
             <ImageButton 
                 onPress={() => navigation.navigate('WashroomUpload')} 
                 imageStyle={styles.icon} 
-                imageSource={require('../images/placeholderIcon.webp')}
+                imageSource={require('../images/add.png')}
             />
             <ImageButton 
                 onPress={() => navigation.navigate('WashroomTimes')} 
                 imageStyle={styles.icon} 
-                imageSource={require('../images/placeholderIcon.webp')} 
+                imageSource={require('../images/schedule.png')} 
             />
             <ImageButton
                 onPress={() => navigation.navigate('SelectUser')}
                 imageStyle={styles.icon}
-                imageSource={require('../images/placeholderIcon.webp')}
+                imageSource={require('../images/donation.png')}
             />
             <ImageButton
                 onPress={() => console.log("Placeholder")}
                 imageStyle={styles.icon}
-                imageSource={require('../images/placeholderIcon.webp')}
+                imageSource={require('../images/sponsor.png')}
             />
             <ImageButton
                 onPress={() => console.log("Placeholder")}
                 imageStyle={styles.icon}
-                imageSource={require('../images/placeholderIcon.webp')}
+                imageSource={require('../images/rating.png')}
             />
         </View>
     );

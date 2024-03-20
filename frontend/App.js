@@ -34,17 +34,17 @@ const App = () => {
         <Stack.Screen
           name="SelectUser"
           component={SelectUser}
-          options={{headerShown: false }}
+          options={{ title: "Donate Now" }}
         />
         <Stack.Screen
           name="DonatorForm"
           component={DonatorForm}
-          options={{headerShown: false }}
+          options={{ title: "Donate Now" }}
         />
         <Stack.Screen
           name="Donation"
           component={Donation}
-          options={{headerShown: false }}
+          options={{ title: "Donate Now" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

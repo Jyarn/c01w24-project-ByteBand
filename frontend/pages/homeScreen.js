@@ -33,8 +33,8 @@ export default HomeScreen = ({navigation}) => {
           value={searchLocation}
           onChangeText={setSearchLocation}
         />
-        <TouchableOpacity onPress={()=> Alert.alert("Covid Alert", "Covid was bad")} style={styles.alert}>
-          <Text style={styles.alertText}>Covid Alert</Text>
+        <TouchableOpacity onPress={()=> Alert.alert("Covid Alert", "Covid was bad")} style={styles.announcement}>
+          <Text style={styles.announcementText}>Announcements</Text>
         </TouchableOpacity>
       </View>
 
@@ -62,10 +62,10 @@ const styles = StyleSheet.create({
     padding: 10,
     fontSize: 16,
   },
-  alert: {
+  announcement: {
     backgroundColor: 'red',
     height: 40,
-    maxWidth: '40%',
+    maxWidth: '38%',
     marginTop: 10,
     borderRadius: 10,
     borderColor: 'red',
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     justifyContent: 'center'
   },
-  alertText: {
+  announcementText: {
     fontSize: 16,
     color: 'white',
   },
