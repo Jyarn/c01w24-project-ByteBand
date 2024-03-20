@@ -7,7 +7,8 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
-import MapView from "react-native-maps";
+// import MapView from "react-native-maps";
+import MapView from "@teovilla/react-native-web-maps"
 import NavBar from "../components/navBar"
 
 export default HomeScreen = ({navigation}) => {
