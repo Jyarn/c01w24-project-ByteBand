@@ -6,8 +6,9 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
+import { SERVER_URL } from "../constants/constants";
 
-const uploadWashroomtime = () => {
+const UploadWashroomtime = () => {
   // Get schedule from backend
 
   const [reason, setReason] = useState("");
@@ -16,7 +17,7 @@ const uploadWashroomtime = () => {
   useEffect(() => {
     const getSchedule = async () => {
       try {
-        await fetch("http://localhost:4000/checkAvailabilitydemo").then(
+        await fetch(`${SERVER_URL}/checkAvailabilitydemo`).then(
           async (response) => {
             if (!response.ok) {
               console.log("Served failed:", response.status);
@@ -193,4 +194,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default uploadWashroomtime;
+export default UploadWashroomtime;

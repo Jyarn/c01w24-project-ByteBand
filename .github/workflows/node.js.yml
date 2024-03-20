@@ -33,6 +33,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
 
       - run: npm i
+      - run: sh ../config-const
       - run: npm run dev &
       - run: sleep 4
       - run: npm test
