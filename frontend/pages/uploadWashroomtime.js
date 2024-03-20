@@ -8,7 +8,7 @@ import {
 } from "react-native";
 import { SERVER_URL } from "../constants/constants";
 
-const uploadWashroomtime = () => {
+const UploadWashroomtime = () => {
   // Get schedule from backend
 
   const [reason, setReason] = useState("");
@@ -194,4 +194,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default uploadWashroomtime;
+export default UploadWashroomtime;

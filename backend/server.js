@@ -12,6 +12,16 @@ import {
 } from "./constants/constants.js";
 
 const app = express();
+const PORT = 4000;
+const mongoURL = "mongodb://127.0.0.1:27017";
+const dbName = "GoHereDB";
+
+// Database collection names
+const COLLECTIONS = {
+  washroomSubmissions: "Washroom Submissions",
+  washrooms: "Washrooms",
+  businessAcknowledgement: "Business Acknowledgement",
+};
 
 // Connect to MongoDB
 let db;
@@ -208,5 +218,57 @@ app.get("/checkAvailability/:id", express.json(), async (req, res) => {
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ response: error.message});
+    }
+});
+
+// Post a washroom rating and feedback to the database
+app.patch("/postRating/:washroomId", express.json(), async (req, res) => {
+    try {
+      // check if washroom ID is valid
+      const washroomId = req.params.washroomId;
+      if (!ObjectId.isValid(washroomId)) {
+        return res.status(400).json({ error: "Invalid washroom ID." });
+      }
+  
+      // assuming both rating and feedback are required  
+      // ### may want to store the user who submitted the rating ###
+      const { rating, feedback } = req.body;
+      if(!rating || !feedback) {
+        return res.status(400).json({ error: "Rating and feedback are required." });
+      }
+  
+      // find the washroom by ID
+      const collection = db.collection(COLLECTIONS.washroomSubmissions);
+      const updateResult = await collection.updateOne(
+        { _id: new ObjectId(washroomId) },
+        { $push: { ratings: { rating, feedback, date: new Date() } } } );
+  
+      if (updateResult.modifiedCount === 0) {
+        return res.status(404).json({ error: "Washroom not found." });
+      }
+      res.status(200).json({ message: "Rating and feedback added successfully." });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+});
+
+app.get("/getRating/:washroomId", express.json(), async (req, res) => {
+    try {
+      // check if washroom ID is valid
+      const washroomId = req.params.washroomId;
+      if (!ObjectId.isValid(washroomId)) {
+        return res.status(400).json({ error: "Invalid washroom ID." });
+      }
+  
+      // find the washroom by ID
+      const collection = db.collection(COLLECTIONS.washroomSubmissions);
+      const washroom = await collection.findOne({ _id: new ObjectId(washroomId) });
+  
+      if (!washroom) {
+        return res.status(404).json({ error: "Washroom not found." });
+      }
+      res.status(200).json({ ratings: washroom.ratings });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
 });
