@@ -10,7 +10,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageButton from "../components/imageButton";
 
-const SelectUser = () => {
+const SelectUser = ({navigation}) => {
     const [users, setUsers] = useState({});
     const [selected, setSelected] = useState("");
 
@@ -90,20 +90,23 @@ const SelectUser = () => {
                                 <ImageButton
                                     key={name + "Delete"}
                                     onPress={() => confirmDeletion(name)}
-                                    imageStyle={{ height: 50, width: 50, marginTop: -15 }}
+                                    imageStyle={{ height: 50, width: 50, marginTop: -18, opacity: 0.7 }}
                                     imageSource={require('../images/delete.png')}
                                 />
                             </View>
                         ))}
                     {Object.keys(users).length >= 4 ? <View />
-                        : <TouchableOpacity onPress={() => console.log("navigate to add user")} style={styles.addButton}>
+                        : <TouchableOpacity onPress={() => navigation.navigate('DonatorForm')} style={styles.addButton}>
                             <Text style={styles.addText}>+</Text>
                         </TouchableOpacity>}
                 </View>
             </View>
             {selected == "" ? <View />
-                : <TouchableOpacity onPress={() => console.log("navigate to payment")} style={styles.submitButton}>
-                    <Text style={styles.submitText}>Pay</Text>
+                : <TouchableOpacity onPress={() => {
+                    // Replace "console.log" with navigation code
+                    navigation.navigate('Donation', { userName: selected });
+                  }} style={styles.submitButton}>
+                    <Text style={styles.submitText}>Donate</Text>
                 </TouchableOpacity>}
         </View>
     );
@@ -184,6 +187,7 @@ const styles = StyleSheet.create({
         width: '40%',
         marginLeft: "30%",
         marginBottom: '5%',
+        top:-100,
     },
     submitText: {
         color: "white",

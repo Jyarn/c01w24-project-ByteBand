@@ -10,7 +10,7 @@ import { RadioButton } from 'react-native-paper';
 import ProvinceSelector from '../components/provinceSelector'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const DonatorForm = () => {
+const DonatorForm = ({navigation}) => {
     const [isCompany, setIsCompany] = useState(false);
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
@@ -90,8 +90,8 @@ const DonatorForm = () => {
         }
         const users = await getUsers();
         users[name] = user;
-
         storeUsers(users);
+        navigation.navigate('SelectUser')
     };
 
     return (
