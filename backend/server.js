@@ -41,7 +41,6 @@ async function connectToMongo() {
 
 connectToMongo();
 
-
 // Open Port
 app.listen(SERVER_PORT, SERVER_HOST, () => {
   console.log(`Server is running on ${SERVER_URL}`);
@@ -49,7 +48,7 @@ app.listen(SERVER_PORT, SERVER_HOST, () => {
 
 app.use(cors());
 
-// Post a washroom submission request to the database
+
 app.post("/submitWashroom", express.json(), async (req, res) => {
   try {
     const { type, name, address, city, province, postal, email } = req.body;
@@ -272,3 +271,39 @@ app.get("/getRating/:washroomId", express.json(), async (req, res) => {
       res.status(500).json({ error: error.message });
     }
 });
+
+app.post("/submitDonation", express.json(), async (req, res) => {
+    const { donatorName, donatedAmount } = req.body;
+  
+    if (!donatorName || !donatedAmount) {
+      return res.status(400).json({ error: "Missing donation details" });
+    }
+  
+    try {
+      const donationsCollection = db.collection('donations');
+      const totalDonationsDocId = "jigitygigity"; 
+  
+      await donationsCollection.insertOne({
+        donatorName,
+        donatedAmount: parseFloat(donatedAmount), 
+        createdAt: new Date() 
+      });
+  
+      const totalDonationsDoc = await donationsCollection.findOne({ _id: totalDonationsDocId });
+      if (totalDonationsDoc) {
+        await donationsCollection.updateOne(
+          { _id: totalDonationsDocId },
+          { $inc: { totalDonations: parseFloat(donatedAmount) } }
+        );
+      } else {
+        await donationsCollection.insertOne({
+          _id: totalDonationsDocId,
+          totalDonations: parseFloat(donatedAmount)
+        });
+      }
+      res.status(200).json({ message: "Donation successfully received" });
+    } catch (error) {
+      console.error("Error updating total donations:", error);
+      res.status(500).json({ error: "Failed to received donation" });
+    }
+  });
