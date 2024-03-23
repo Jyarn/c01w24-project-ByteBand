@@ -10,7 +10,7 @@ import {
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import ImageButton from "../components/imageButton";
 
-const SelectUser = ({navigation}) => {
+const SelectUser = ({ navigation }) => {
     const [users, setUsers] = useState({});
     const [selected, setSelected] = useState("");
 
@@ -52,8 +52,6 @@ const SelectUser = ({navigation}) => {
     useEffect(() => {
         const loadUsers = async () => {
             setUsers(await getUsers());
-            console.log(users);
-            console.log(Object.keys(users));
         }
         loadUsers();
     }, []);
@@ -61,15 +59,21 @@ const SelectUser = ({navigation}) => {
     return (
         <View style={styles.container}>
             <View style={{ flex: 1 }}>
-                <Text style={styles.title}>Donate Now</Text>
+                <View style={{flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 20}}>
+                    <ImageButton
+                        onPress={() => navigation.navigate('Donation')}
+                        imageStyle={{ height: 30, width: 30 }}
+                        imageSource={require('../images/back.png')}
+                    />
+                    <Text style={styles.title}>Donate Now</Text>
+                </View>
                 <Text style={styles.amount_title}>Choose User</Text>
                 <View style={styles.redLine} />
                 <View style={styles.userList}>
                     {users == {} ? <View />
                         : Object.keys(users).map((name) => (
-                            <View style={styles.userEntry}>
+                            <View key={name + "View"} style={styles.userEntry}>
                                 <TouchableOpacity
-                                    key={name}
                                     style={[
                                         styles.userButton,
                                         {
@@ -88,7 +92,6 @@ const SelectUser = ({navigation}) => {
                                     />
                                 </TouchableOpacity>
                                 <ImageButton
-                                    key={name + "Delete"}
                                     onPress={() => confirmDeletion(name)}
                                     imageStyle={{ height: 50, width: 50, marginTop: -18, opacity: 0.7 }}
                                     imageSource={require('../images/delete.png')}
@@ -136,8 +139,10 @@ const styles = StyleSheet.create({
         left: "center", // Align to the left of the container
         fontSize: 30,
         color: "#000000",
-        margin: 10, // Add a little space from the top and left edges
+        marginLeft: '15%',
+        marginBottom: 15,
         alignSelf: 'center',
+        textAlignVertical: 'center',
     },
     icon: {
         height: 50,

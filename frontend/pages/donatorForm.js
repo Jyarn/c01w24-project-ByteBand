@@ -9,8 +9,9 @@ import {
 import { RadioButton } from 'react-native-paper';
 import ProvinceSelector from '../components/provinceSelector'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import ImageButton from "../components/imageButton";
 
-const DonatorForm = ({navigation}) => {
+const DonatorForm = ({ navigation }) => {
     const [isCompany, setIsCompany] = useState(false);
     const [name, setName] = useState("");
     const [address, setAddress] = useState("");
@@ -53,19 +54,7 @@ const DonatorForm = ({navigation}) => {
         }
 
         // check for valid postal codes
-        if (postal.length != 6) {
-            setError("Please Enter a valid Postal Code");
-            return;
-        }
-        // check that all odd characters are letters
-        if (!(postal[0].match(/[a-z]/i) && postal[2].match(/[a-z]/i)
-            && postal[4].match(/[a-z]/i))) {
-            setError("Please Enter a valid Postal Code");
-            return;
-        }
-        // check that all even characters are numbers
-        if (!(postal[1].match(/^\d$/) && postal[3].match(/^\d$/)
-            && postal[5].match(/^\d$/))) {
+        if (!postal.match(/^[ABCEGHJ-NPRSTVXY]\d[ABCEGHJ-NPRSTV-Z][ ]?\d[ABCEGHJ-NPRSTV-Z]\d$/i)) {
             setError("Please Enter a valid Postal Code");
             return;
         }
@@ -85,7 +74,7 @@ const DonatorForm = ({navigation}) => {
             "address": address,
             "city": city,
             "province": province,
-            "postal": postal,
+            "postal": postal.replace(/\s/g, ""),
             "email": email
         }
         const users = await getUsers();
@@ -96,7 +85,14 @@ const DonatorForm = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>Donate Now</Text>
+            <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 20 }}>
+                <ImageButton
+                    onPress={() => navigation.navigate('SelectUser')}
+                    imageStyle={{ height: 30, width: 30 }}
+                    imageSource={require('../images/back.png')}
+                />
+                <Text style={styles.title}>Donate Now</Text>
+            </View>
             <Text style={styles.amount_title}>Add User</Text>
             <View style={styles.redLine} />
             <View style={styles.radioContainer}>
@@ -199,20 +195,22 @@ const styles = StyleSheet.create({
         left: "center", // Align to the left of the container
         fontSize: 30,
         color: "#000000",
-        margin: 10, // Add a little space from the top and left edges
+        marginLeft: '15%',
+        marginBottom: 15,
         alignSelf: 'center',
+        textAlignVertical: 'center',
     },
     radioContainer: {
         flexDirection: "row",
         marginBottom: 20,
         gap: 50,
-        left:10,
+        left: 10,
     },
     radioText: {
         textAlign: "center",
         marginTop: 7,
         marginRight: 25,
-        left:-50,
+        left: -50,
     },
     input: {
         backgroundColor: "#F9F9F9",

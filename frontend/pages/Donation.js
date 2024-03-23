@@ -7,6 +7,7 @@ import {
   TextInput,
   Modal,
 } from "react-native";
+import ImageButton from "../components/imageButton";
 import CardField from "../components/cardfield";
 
 const Donation = ({ route , navigation }) => {
@@ -68,12 +69,20 @@ const Donation = ({ route , navigation }) => {
       alert("Please select or enter a valid amount");
       return;
     }
+    navigation.navigate('SelectUser');
     setPaymentSheetVisible(true);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Donate Now</Text>
+      <View style={{ flexDirection: 'row', gap: 10, alignItems: 'center', marginTop: 40, marginRight: '25%' }}>
+        <ImageButton
+          onPress={() => navigation.navigate('Home')}
+          imageStyle={{ height: 30, width: 30 }}
+          imageSource={require('../images/back.png')}
+        />
+        <Text style={styles.title}>Donate Now</Text>
+      </View>
       <Text style={styles.amount_title}>Donation Amount</Text>
       <Text style={styles.other_title}>Other Amount</Text>
       <View style={styles.redLine}></View>
@@ -109,6 +118,7 @@ const Donation = ({ route , navigation }) => {
           setSelectedAmount(null);
         }}
         onFocus={() => {
+          setIsFocused(true);
           setCustomAmount("");
           setSelectedAmount(null);
         }}
@@ -285,15 +295,15 @@ const styles = StyleSheet.create({
   },
 
   other_title: {
-    top: 280, 
-    left: -110, 
+    top: 280, // Align to the top of the container
+    left: -110, // Align to the left of the container
     fontSize: 17,
     color: "#000000",
     margin: 10, 
   },
   amount_title: {
-    top: 0, 
-    left: -100, 
+    top: 0, // Align to the top of the container
+    left: -100, // Align to the left of the container
     fontSize: 17,
     color: "#000000",
     margin: 10, 
@@ -317,15 +327,17 @@ const styles = StyleSheet.create({
   },
 
   title: {
-    top: 0, 
-    left: "center", 
+    top: 10,
+    left: "center", // Align to the left of the container
     fontSize: 30,
     color: "#000000",
-    margin: 10, 
+    marginLeft: '20%',
+    marginBottom: 15,
+    alignSelf: 'center',
+    textAlignVertical: 'center',
   },
   container: {
     flex: 1,
-    justifyContent: "center",
     alignItems: "center",
     padding: 20,
   },
