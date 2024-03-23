@@ -149,7 +149,7 @@ const CardField = ({ onCardChange }) => {
           <TextInput
             style={styles.countryInput}
             placeholder=" Country Code"
-            maxLength={3}
+            maxLength={2}
             keyboardType="default"
             value={country}
             onChangeText={handleCountryChange}

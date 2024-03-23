@@ -120,7 +120,7 @@ const Donation = ({ route, navigation }) => {
         placeholder="Enter Your Donation Amount"
         value={customAmount}
         onChangeText={(text) => {
-          const cleanedText = text.replace(/[^0-9]/g, "");
+          const cleanedText = text.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
           setCustomAmount(cleanedText);
           setSelectedAmount(null);
         }}

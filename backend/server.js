@@ -278,49 +278,38 @@ app.get("/getRating/:washroomId", express.json(), async (req, res) => {
 
 app.post("/submitDonation", express.json(), async (req, res) => {
   const { donatorName, donatedAmount } = req.body;
-
-  // Remove any characters that are not digits or a decimal point
+  //change all variables to numeric
   const sanitizedAmount = donatedAmount.replace(/[^\d.]/g, "");
-  // Parse the sanitized amount as a float
   const amount = parseFloat(sanitizedAmount);
-
-  console.log("Original donatedAmount:", donatedAmount); // Log original amount
-  console.log("Sanitized and parsed numericAmount:", amount); // Log sanitized and parsed amount
-
   if (!donatorName || isNaN(amount)) {
     return res.status(400).json({ error: "Invalid donation details" });
   }
-
+  //add the user and amount
   try {
     const donationsCollection = db.collection(COLLECTIONS.donation);
-    const totalDonationsDocId = "jigitygigity";
-
+    const totalDonationsDocId = "TotalDonationID";
     await donationsCollection.insertOne({
       donatorName,
-      donatedAmount: amount, // Ensure this is the parsed float value
+      donatedAmount: amount, 
       createdAt: new Date(),
     });
-
+    //accumulate the total donations
     const totalDonationsDoc = await donationsCollection.findOne({ _id: totalDonationsDocId });
     if (totalDonationsDoc) {
-      if (isNaN(totalDonationsDoc.totalDonations)) {
-        console.log("Resetting totalDonations due to NaN, new value:", amount);
-        await donationsCollection.updateOne(
-          { _id: totalDonationsDocId },
-          { $set: { totalDonations: amount } } // Use parsed float value
-        );
-      } else {
-        console.log("Incrementing totalDonations by:", amount);
-        await donationsCollection.updateOne(
-          { _id: totalDonationsDocId },
-          { $inc: { totalDonations: amount } } // Use parsed float value
-        );
+      let totalDonationsNumeric = parseFloat(totalDonationsDoc.totalDonations);
+      if (isNaN(totalDonationsNumeric)) {
+        totalDonationsNumeric = 0; 
       }
+      console.log("Updating totalDonations by:", amount);
+      await donationsCollection.updateOne(
+        { _id: totalDonationsDocId },
+        { $set: { totalDonations: totalDonationsNumeric + amount } } 
+      );
     } else {
       console.log("Initializing totalDonations with:", amount);
       await donationsCollection.insertOne({
         _id: totalDonationsDocId,
-        totalDonations: amount, // Use parsed float value
+        totalDonations: amount, 
       });
     }
     res.status(200).json({ message: "Donation successfully received" });
