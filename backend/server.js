@@ -1,27 +1,17 @@
 import express from "express";
 import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
-import parseWashroomTimes from './parseWashroomTimes.js';
+import parseWashroomTimes from "./parseWashroomTimes.js";
 import {
   SERVER_HOST,
   SERVER_PORT,
   SERVER_URL,
   MONGO_URL,
   COLLECTIONS,
-  DB_NAME
+  DB_NAME,
 } from "./constants/constants.js";
 
 const app = express();
-const PORT = 4000;
-const mongoURL = "mongodb://127.0.0.1:27017";
-const dbName = "GoHereDB";
-
-// Database collection names
-const COLLECTIONS = {
-  washroomSubmissions: "Washroom Submissions",
-  washrooms: "Washrooms",
-  businessAcknowledgement: "Business Acknowledgement",
-};
 
 // Connect to MongoDB
 let db;
@@ -48,7 +38,6 @@ app.listen(SERVER_PORT, SERVER_HOST, () => {
 
 app.use(cors());
 
-
 app.post("/submitWashroom", express.json(), async (req, res) => {
   try {
     const { type, name, address, city, province, postal, email } = req.body;
@@ -58,20 +47,18 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
     if (!type || (type != "User" && type != "Business")) {
       return res
         .status(400)
-        .json({ error: "Submission type must be 'User' or 'Business'."});
+        .json({ error: "Submission type must be 'User' or 'Business'." });
     }
 
     // Check that the full address is given
     if (!address || !city || !province) {
-        return res
-          .status(400)
-          .json({ error: "The full address of the location is required."});
+      return res
+        .status(400)
+        .json({ error: "The full address of the location is required." });
     }
 
     if (!postal) {
-      return res
-        .status(400)
-        .json({error: "A postal address is required." });
+      return res.status(400).json({ error: "A postal address is required." });
     }
 
     // Send submission info to database
@@ -84,226 +71,262 @@ app.post("/submitWashroom", express.json(), async (req, res) => {
       province,
       postal,
       email,
-      createdAt
+      createdAt,
     });
 
     res.json({
       response: "Washroom submission added successfully.",
       insertedId: result.insertedId,
     });
-
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 app.get("/getAllWashrooms", express.json(), async (req, res) => {
-    try {
-        const coll = db.collection(COLLECTIONS.washrooms);
-        const data = await coll.find().toArray();
-        res.status(200).json({ response: data });
-    } catch (error) {
-        res.status(500).json({ response: error.message });
-    }
+  try {
+    const coll = db.collection(COLLECTIONS.washrooms);
+    const data = await coll.find().toArray();
+    res.status(200).json({ response: data });
+  } catch (error) {
+    res.status(500).json({ response: error.message });
+  }
 });
 
 app.get("/getWashroom/:id", express.json(), async (req, res) => {
-    try {
-        const { id } = req.params;
-        if (!ObjectId.isValid(id))
-            return res.status(400).json({ response: "Invalid note ID." });
+  try {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id))
+      return res.status(400).json({ response: "Invalid note ID." });
 
-        const coll = db.collection(COLLECTIONS.washrooms);
-        const data = await coll.findOne ({ _id: new ObjectId(id) });
-        if (!data)
-            return res.status(404).json({ response: "unable to get washroom" });
-        res.status(200).json({ response: data });
-    } catch (error) {
-        res.status(500).json({ response: error.message});
-    }
+    const coll = db.collection(COLLECTIONS.washrooms);
+    const data = await coll.findOne({ _id: new ObjectId(id) });
+    if (!data)
+      return res.status(404).json({ response: "unable to get washroom" });
+    res.status(200).json({ response: data });
+  } catch (error) {
+    res.status(500).json({ response: error.message });
+  }
 });
 
 app.get("/checkAvailabilitydemo", express.json(), async (req, res) => {
-    try {
-        const coll = db.collection(COLLECTIONS.washrooms);
-        const data = await coll.find().toArray();
-        if (!data || data.length != 0) {
-            const times = data[0].times;
+  try {
+    const coll = db.collection(COLLECTIONS.washrooms);
+    const data = await coll.find().toArray();
+    if (!data || data.length != 0) {
+      const times = data[0].times;
 
-            for (const day in times) {
-                times[day].forEach((time) => {
-                    const start_hr = Math.floor(time.start / 60).toString();
-                    const start_min = (time.start % 60).toString();
+      for (const day in times) {
+        times[day].forEach((time) => {
+          const start_hr = Math.floor(time.start / 60).toString();
+          const start_min = (time.start % 60).toString();
 
-                    const end_hr = Math.floor(time.end / 60).toString();
-                    const end_min = (time.end % 60).toString();
+          const end_hr = Math.floor(time.end / 60).toString();
+          const end_min = (time.end % 60).toString();
 
-                    time.start = `${start_hr}:${start_min.length == 1 ? start_min + "0" : start_min }`;
-                    time.end = `${end_hr}:${end_min.length == 1 ? end_min + "0" : end_min }`;
-                });
-            }
-            return res.status(200).json({ response: times });
-
-        } else {
-            const schedule = parseWashroomTimes();
-            return res.status(200).json({ response: schedule });
-        }
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ error: error.message});
+          time.start = `${start_hr}:${
+            start_min.length == 1 ? start_min + "0" : start_min
+          }`;
+          time.end = `${end_hr}:${
+            end_min.length == 1 ? end_min + "0" : end_min
+          }`;
+        });
+      }
+      return res.status(200).json({ response: times });
+    } else {
+      const schedule = parseWashroomTimes();
+      return res.status(200).json({ response: schedule });
     }
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ error: error.message });
+  }
 });
 
-app.get("/getWashroomTimes/:id", express.json(), async(req, res) => {
-    try {
-        const { id } = req.params;
-        if (!ObjectId.isValid(id))
-            return res.status(400).json({ response: "Invalid note ID." });
+app.get("/getWashroomTimes/:id", express.json(), async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (!ObjectId.isValid(id))
+      return res.status(400).json({ response: "Invalid note ID." });
 
-        const coll = db.collection(COLLECTIONS.washrooms);
-        const data = await coll.findOne ({ _id: new ObjectId(id) });
-        if (!data)
-            return res.status(404).json({ response: "unable to get washroom" });
+    const coll = db.collection(COLLECTIONS.washrooms);
+    const data = await coll.findOne({ _id: new ObjectId(id) });
+    if (!data)
+      return res.status(404).json({ response: "unable to get washroom" });
 
-        const times = data.times;
+    const times = data.times;
 
-        for (const day in times) {
-            times[day].forEach((time) => {
-                const start_hr = Math.floor(time.start / 60).toString();
-                const start_min = (time.start % 60).toString();
+    for (const day in times) {
+      times[day].forEach((time) => {
+        const start_hr = Math.floor(time.start / 60).toString();
+        const start_min = (time.start % 60).toString();
 
-                const end_hr = Math.floor(time.end / 60).toString();
-                const end_min = (time.end % 60).toString();
+        const end_hr = Math.floor(time.end / 60).toString();
+        const end_min = (time.end % 60).toString();
 
-                time.start = `${start_hr}:${start_min.length == 1 ? start_min + "0" : start_min }`;
-                time.end = `${end_hr}:${end_min.length == 1 ? end_min + "0" : end_min }`;
-            });
-        }
-
-        res.status(200).json({ response: times });
-    } catch (error) {
-        res.status(500).json({ response: error.message});
+        time.start = `${start_hr}:${
+          start_min.length == 1 ? start_min + "0" : start_min
+        }`;
+        time.end = `${end_hr}:${end_min.length == 1 ? end_min + "0" : end_min}`;
+      });
     }
+
+    res.status(200).json({ response: times });
+  } catch (error) {
+    res.status(500).json({ response: error.message });
+  }
 });
 
 app.get("/checkAvailability/:id", express.json(), async (req, res) => {
-    const { id } = req.params;
-    const day = req.query.day;
-    const hr  = req.query.hr;
-    const min = req.query.min;
+  const { id } = req.params;
+  const day = req.query.day;
+  const hr = req.query.hr;
+  const min = req.query.min;
 
-    if (!ObjectId.isValid(id) || !day || !hr || !min)
-        return res.status(400).json({ response: "Invalid washroom id"});
+  if (!ObjectId.isValid(id) || !day || !hr || !min)
+    return res.status(400).json({ response: "Invalid washroom id" });
 
-    try {
-        const timehash = Number(hr)*60 + Number(min);
-        const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-        const coll = db.collection(COLLECTIONS.washrooms);
-        const data = await coll.findOne({ _id: new ObjectId(id) });
+  try {
+    const timehash = Number(hr) * 60 + Number(min);
+    const days = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+    const coll = db.collection(COLLECTIONS.washrooms);
+    const data = await coll.findOne({ _id: new ObjectId(id) });
 
-        if (!data)
-            return res.status(404).json({ response: "Unable to get data" });
+    if (!data) return res.status(404).json({ response: "Unable to get data" });
 
-        let response = false;
+    let response = false;
 
-        let ret = false;
-        data.times[days[Number(day)]].forEach((t, _) => {
-            if (t.start <= timehash && timehash <= t.end)
-                response = true;
-                return;
-        })
+    let ret = false;
+    data.times[days[Number(day)]].forEach((t, _) => {
+      if (t.start <= timehash && timehash <= t.end) response = true;
+      return;
+    });
 
-        return res.status(200).json({ response: response });
-    } catch (error) {
-        console.log(error.message);
-        res.status(500).json({ response: error.message});
-    }
+    return res.status(200).json({ response: response });
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({ response: error.message });
+  }
 });
 
 // Post a washroom rating and feedback to the database
 app.patch("/postRating/:washroomId", express.json(), async (req, res) => {
-    try {
-      // check if washroom ID is valid
-      const washroomId = req.params.washroomId;
-      if (!ObjectId.isValid(washroomId)) {
-        return res.status(400).json({ error: "Invalid washroom ID." });
-      }
-  
-      // assuming both rating and feedback are required  
-      // ### may want to store the user who submitted the rating ###
-      const { rating, feedback } = req.body;
-      if(!rating || !feedback) {
-        return res.status(400).json({ error: "Rating and feedback are required." });
-      }
-  
-      // find the washroom by ID
-      const collection = db.collection(COLLECTIONS.washroomSubmissions);
-      const updateResult = await collection.updateOne(
-        { _id: new ObjectId(washroomId) },
-        { $push: { ratings: { rating, feedback, date: new Date() } } } );
-  
-      if (updateResult.modifiedCount === 0) {
-        return res.status(404).json({ error: "Washroom not found." });
-      }
-      res.status(200).json({ message: "Rating and feedback added successfully." });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+  try {
+    // check if washroom ID is valid
+    const washroomId = req.params.washroomId;
+    if (!ObjectId.isValid(washroomId)) {
+      return res.status(400).json({ error: "Invalid washroom ID." });
     }
+
+    // assuming both rating and feedback are required
+    // ### may want to store the user who submitted the rating ###
+    const { rating, feedback } = req.body;
+    if (!rating || !feedback) {
+      return res
+        .status(400)
+        .json({ error: "Rating and feedback are required." });
+    }
+
+    // find the washroom by ID
+    const collection = db.collection(COLLECTIONS.washroomSubmissions);
+    const updateResult = await collection.updateOne(
+      { _id: new ObjectId(washroomId) },
+      { $push: { ratings: { rating, feedback, date: new Date() } } }
+    );
+
+    if (updateResult.modifiedCount === 0) {
+      return res.status(404).json({ error: "Washroom not found." });
+    }
+    res
+      .status(200)
+      .json({ message: "Rating and feedback added successfully." });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.get("/getRating/:washroomId", express.json(), async (req, res) => {
-    try {
-      // check if washroom ID is valid
-      const washroomId = req.params.washroomId;
-      if (!ObjectId.isValid(washroomId)) {
-        return res.status(400).json({ error: "Invalid washroom ID." });
-      }
-  
-      // find the washroom by ID
-      const collection = db.collection(COLLECTIONS.washroomSubmissions);
-      const washroom = await collection.findOne({ _id: new ObjectId(washroomId) });
-  
-      if (!washroom) {
-        return res.status(404).json({ error: "Washroom not found." });
-      }
-      res.status(200).json({ ratings: washroom.ratings });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
+  try {
+    // check if washroom ID is valid
+    const washroomId = req.params.washroomId;
+    if (!ObjectId.isValid(washroomId)) {
+      return res.status(400).json({ error: "Invalid washroom ID." });
     }
+
+    // find the washroom by ID
+    const collection = db.collection(COLLECTIONS.washroomSubmissions);
+    const washroom = await collection.findOne({
+      _id: new ObjectId(washroomId),
+    });
+
+    if (!washroom) {
+      return res.status(404).json({ error: "Washroom not found." });
+    }
+    res.status(200).json({ ratings: washroom.ratings });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 app.post("/submitDonation", express.json(), async (req, res) => {
-    const { donatorName, donatedAmount } = req.body;
-  
-    if (!donatorName || !donatedAmount) {
-      return res.status(400).json({ error: "Missing donation details" });
-    }
-  
-    try {
-      const donationsCollection = db.collection('donations');
-      const totalDonationsDocId = "jigitygigity"; 
-  
-      await donationsCollection.insertOne({
-        donatorName,
-        donatedAmount: parseFloat(donatedAmount), 
-        createdAt: new Date() 
-      });
-  
-      const totalDonationsDoc = await donationsCollection.findOne({ _id: totalDonationsDocId });
-      if (totalDonationsDoc) {
+  const { donatorName, donatedAmount } = req.body;
+
+  // Remove any characters that are not digits or a decimal point
+  const sanitizedAmount = donatedAmount.replace(/[^\d.]/g, "");
+  // Parse the sanitized amount as a float
+  const amount = parseFloat(sanitizedAmount);
+
+  console.log("Original donatedAmount:", donatedAmount); // Log original amount
+  console.log("Sanitized and parsed numericAmount:", amount); // Log sanitized and parsed amount
+
+  if (!donatorName || isNaN(amount)) {
+    return res.status(400).json({ error: "Invalid donation details" });
+  }
+
+  try {
+    const donationsCollection = db.collection(COLLECTIONS.donation);
+    const totalDonationsDocId = "jigitygigity";
+
+    await donationsCollection.insertOne({
+      donatorName,
+      donatedAmount: amount, // Ensure this is the parsed float value
+      createdAt: new Date(),
+    });
+
+    const totalDonationsDoc = await donationsCollection.findOne({ _id: totalDonationsDocId });
+    if (totalDonationsDoc) {
+      if (isNaN(totalDonationsDoc.totalDonations)) {
+        console.log("Resetting totalDonations due to NaN, new value:", amount);
         await donationsCollection.updateOne(
           { _id: totalDonationsDocId },
-          { $inc: { totalDonations: parseFloat(donatedAmount) } }
+          { $set: { totalDonations: amount } } // Use parsed float value
         );
       } else {
-        await donationsCollection.insertOne({
-          _id: totalDonationsDocId,
-          totalDonations: parseFloat(donatedAmount)
-        });
+        console.log("Incrementing totalDonations by:", amount);
+        await donationsCollection.updateOne(
+          { _id: totalDonationsDocId },
+          { $inc: { totalDonations: amount } } // Use parsed float value
+        );
       }
-      res.status(200).json({ message: "Donation successfully received" });
-    } catch (error) {
-      console.error("Error updating total donations:", error);
-      res.status(500).json({ error: "Failed to received donation" });
+    } else {
+      console.log("Initializing totalDonations with:", amount);
+      await donationsCollection.insertOne({
+        _id: totalDonationsDocId,
+        totalDonations: amount, // Use parsed float value
+      });
     }
-  });
+    res.status(200).json({ message: "Donation successfully received" });
+  } catch (error) {
+    console.error("Error updating total donations:", error);
+    res.status(500).json({ error: "Failed to receive donation" });
+  }
+});
+
