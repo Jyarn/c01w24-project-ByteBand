@@ -287,13 +287,15 @@ app.post("/submitDonation", express.json(), async (req, res) => {
   //add the user and amount
   try {
     const donationsCollection = db.collection(COLLECTIONS.donation);
+    const donatorsCollection = db.collection(COLLECTIONS.donators);
     const totalDonationsDocId = "TotalDonationID";
-    await donationsCollection.insertOne({
+    await donatorsCollection.insertOne({
       donatorName,
       donatedAmount: amount, 
       createdAt: new Date(),
     });
     //accumulate the total donations
+    
     const totalDonationsDoc = await donationsCollection.findOne({ _id: totalDonationsDocId });
     if (totalDonationsDoc) {
       let totalDonationsNumeric = parseFloat(totalDonationsDoc.totalDonations);

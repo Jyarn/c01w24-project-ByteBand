@@ -61,7 +61,7 @@ const SelectUser = ({ navigation }) => {
             <View style={{ flex: 1 }}>
                 <View style={{flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 20}}>
                     <ImageButton
-                        onPress={() => navigation.navigate('Donation')}
+                        onPress={() => navigation.navigate('HomeScreen')} //needs to be set properly
                         imageStyle={{ height: 30, width: 30 }}
                         imageSource={require('../images/back.png')}
                     />
