@@ -35,7 +35,8 @@ const CardField = ({ onCardChange }) => {
   const [zip, setZip] = useState("");
   const [country, setCountry] = useState("");
   const [cvc, setCvc] = useState("");
-  
+  const [isCardNumberFocused, setIsCardNumberFocused] = useState(false);
+  const [isCvcFocused, setIsCvcFocused] = useState(false);
   const handleCvcChange = (text) => {
     // Filter out non-numeric characters
     const numericOnly = text.replace(/[^0-9]/g, '');
@@ -118,6 +119,8 @@ const CardField = ({ onCardChange }) => {
           maxLength={19}
           value={cardNumber}
           onChangeText={handleCardNumberChange}
+          onFocus={() => setIsCardNumberFocused(true)}
+          onBlur={() => setIsCardNumberFocused(false)}
         />
         <View style={styles.inputRow}>
           <TextInput
@@ -135,14 +138,16 @@ const CardField = ({ onCardChange }) => {
             maxLength={3}
             value={cvc}
             onChangeText={handleCvcChange}
+            onFocus={() => setIsCvcFocused(true)}
+            onBlur={() => setIsCvcFocused(false)}
           />
           <Image
             source={require("../images/creditback.png")}
-            style={[styles.backIcon, { opacity: 0.3 }]} // Adjust opacity here
+            style={[styles.backIcon, { opacity: isCvcFocused ? 0 : 0.3 }]}
           />
           <Image
-          source={require("../images/creditfront.png")}
-          style={[styles.frontIcon, { opacity: 0.3 }]} // Adjust opacity here
+            source={require("../images/creditfront.png")}
+            style={[styles.frontIcon, { opacity: isCardNumberFocused ? 0 : 0.3 }]}
         />
         </View>
         <View style={styles.inputRow2}>
