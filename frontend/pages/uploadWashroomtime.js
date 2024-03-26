@@ -6,7 +6,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-import { SERVER_URL } from "../constants/constants";
+import { SERVER_URL } from "../constants/constants.js";
 
 const UploadWashroomtime = () => {
   // Get schedule from backend

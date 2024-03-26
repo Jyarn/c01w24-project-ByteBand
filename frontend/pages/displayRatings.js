@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
+import SERVER_URL from "../constants/constants.js";
+
 const DisplayRatings = ({ washroomId }) => {
   const [ratings, setRatings] = useState([]);
-
-  const SERVER_URL = "http://localhost:4000";
 
   useEffect(() => {
     const fetchRatings = async () => {

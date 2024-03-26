@@ -11,7 +11,9 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const SERVER_URL = "http://localhost:4000";
+// const SERVER_URL = "http://10.0.2.2:4000";
+
+import SERVER_URL from "../constants/constants.js";
 
 const AddRatings = ({ washroomId }) => {
   const starRatingOptions = [1, 2, 3, 4, 5];
@@ -137,7 +139,7 @@ const styles = StyleSheet.create({
   },
   submitButton: {
     marginTop: 20,
-    backgroundColor: '#FF0000', // Example button color
+    backgroundColor: '#FF0000',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
   },
   submitMessage: {
     marginTop: 20,
-    color: 'green', // Or change based on success or error
+    color: 'green', 
     fontSize: 16,
   },
 });
