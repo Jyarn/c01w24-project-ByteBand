@@ -11,9 +11,7 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-// const SERVER_URL = "http://10.0.2.2:4000";
-
-import SERVER_URL from "../constants/constants.js";
+import { SERVER_URL } from '../constants/constants';
 
 const AddRatings = ({ washroomId }) => {
   const starRatingOptions = [1, 2, 3, 4, 5];
@@ -57,7 +55,6 @@ const AddRatings = ({ washroomId }) => {
         console.log("Server failed:", response.status);
       } else {
         setSubmitMessage("Rating and feedback added successfully!");
-        // Optionally reset the form here
         setRating(null);
         setFeedback('');
       }
@@ -70,7 +67,7 @@ const AddRatings = ({ washroomId }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.heading}>{rating ? `${rating}` : 'Tap to rate'}</Text>
+        {/* <Text style={styles.heading}>{rating ? `${rating}` : 'Tap to rate'}</Text> */}
         <View style={styles.stars}>
           {starRatingOptions.map((option) => (
             <TouchableWithoutFeedback
@@ -122,16 +119,21 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   stars: {
-    display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'center', 
+    flexWrap: 'wrap',
+    marginHorizontal: -2, 
   },
   starUnselected: {
     color: '#aaa',
+    margin: 2,
   },
   starSelected: {
     color: '#FF0000',
+    margin: 2,
   },
   input: {
+    width: '100%',
     height: 40,
     margin: 12,
     borderWidth: 1,
@@ -143,6 +145,8 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    width: '60%',
+    alignSelf: 'center',
   },
   submitText: {
     color: 'white',
@@ -153,7 +157,9 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: 'green', 
     fontSize: 16,
+    textAlign: 'center',
   },
 });
+
 
 export default AddRatings;
