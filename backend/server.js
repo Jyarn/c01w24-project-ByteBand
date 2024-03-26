@@ -1,7 +1,6 @@
 import express from "express";
 import { MongoClient, ObjectId } from "mongodb";
 import cors from "cors";
-import parseWashroomTimes from './parseWashroomTimes.js';
 import {
   SERVER_HOST,
   SERVER_PORT,
@@ -38,6 +37,51 @@ app.listen(SERVER_PORT, SERVER_HOST, () => {
 });
 
 app.use(cors());
+
+
+app.post("/initdatabase", express.json(), async(req, res) => {
+  const washroomCollection = db.collection(COLLECTIONS.washrooms);
+  try {
+    await washroomCollection.drop({ }); // reset database
+    await washroomCollection.insertMany([{
+      address: "1587 Marshall Street, Baltimore",
+      useSchedule: false,
+      overrideStatus: false,
+      status: "Washroom yucky",
+      times: {
+        "Sunday": [],
+        "Monday": [],
+        "Tuesday": [],
+        "Wednesday": [],
+        "Thursday": [],
+        "Friday": [],
+        "Saturday": [],
+      }
+    },
+      {
+        address: "2571 Heron Way, Salem",
+        useSchedule: false,
+        overrideStatus: true,
+        status: "Hunting witches",
+        times: {
+          "Sunday": [{ "start": 540, "end": 1350 }],
+          "Monday": [],
+          "Tuesday": [],
+          "Wednesday": [ { "start": 0, "end": 780 }, { "start": 800, "end": 1400 }],
+          "Thursday": [],
+          "Friday": [],
+          "Saturday": [],
+        }
+      }
+    ]);
+
+    res.status(200);
+  } catch (error) {
+    res.status(400);
+    console.log(error.message);
+  }
+});
+
 
 // Post a washroom submission request to the database
 app.post("/submitWashroom", express.json(), async (req, res) => {
