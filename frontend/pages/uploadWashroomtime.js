@@ -6,8 +6,7 @@ import {
   Image,
   StyleSheet,
 } from "react-native";
-// import { SERVER_URL } from "../constants/constants.js";
-export const SERVER_URL = "https://42bd-2606-fa00-8a0-700-b4ca-2b19-69a4-3709.ngrok-free.app";
+import { SERVER_URL } from "../constants/constants.js";
 
 const UploadWashroomtime = () => {
   // Get schedule from backend

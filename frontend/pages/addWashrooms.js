@@ -7,9 +7,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { RadioButton } from 'react-native-paper';
-// import { SERVER_URL } from "../constants/constants.js";
-
-export const SERVER_URL = "https://42bd-2606-fa00-8a0-700-b4ca-2b19-69a4-3709.ngrok-free.app";
+import { SERVER_URL } from "../constants/constants.js";
 
 import ProvinceSelector from "../components/provinceSelector";
 import ImageButton from "../components/imageButton";
