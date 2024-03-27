@@ -6,8 +6,13 @@ const MapMarker = ({ washroom, onPress }) => {
   const [coordinate, setCoordinate] = useState(null);
 
   const fetchCoordinate = async () => {
-    const geoCodedLocation = await Location.geocodeAsync(washroom.googleAddress);
-    setCoordinate(geoCodedLocation[0]);
+    try {
+      await Location.geocodeAsync(washroom.googleAddress).then((data) => {
+        setCoordinate(data[0]);
+      });
+    } catch (error) {
+      console.log("Fetch marker coordinate failed:", error);
+    }
   }
 
   fetchCoordinate();

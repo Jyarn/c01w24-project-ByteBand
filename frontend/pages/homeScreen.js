@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   TextInput,
   Text,
   StyleSheet,
   TouchableOpacity,
+  Pressable,
+  ActivityIndicator
 } from "react-native";
 import MapView from "react-native-maps";
 import * as Location from "expo-location";
@@ -21,10 +23,12 @@ const DEFAULT_REGION = {
 
 export default HomeScreen = ({navigation}) => {
   const [washrooms, setWashrooms] = useState(undefined);
-  const [initialRegion, setInitialRegion] = useState(null);
-  //currently this does nothing as we can't search locations
+  const [region, setRegion] = useState(null);
   const [searchLocation, setSearchLocation] = useState("");
   const [loading, setLoading] = useState(true);
+  const [loadingSearch, setLoadingSearch] = useState(false);
+
+  const mapRef = useRef();
 
   useEffect(() => {
     const getWashrooms = async () => {
@@ -48,10 +52,10 @@ export default HomeScreen = ({navigation}) => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== "granted") {
           console.log("Permissions to access location was denied.");
-          setInitialRegion(DEFAULT_REGION);
+          setRegion(DEFAULT_REGION);
         } else {
           let location = await Location.getCurrentPositionAsync({});
-          setInitialRegion({
+          setRegion({
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
             latitudeDelta: 0.015,
@@ -69,14 +73,43 @@ export default HomeScreen = ({navigation}) => {
     getUserLocation();
   }, []);
 
+  const fetchSearchLocation = async () => {
+    try {
+      setLoadingSearch(true);
+      await Location.geocodeAsync(searchLocation).then((data) => {
+        setRegion({
+          latitude: data[0].latitude,
+          longitude: data[0].longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.015,
+        });
+        mapRef.current.animateToRegion(region);
+        setLoadingSearch(false);
+      });
+    } catch (error) {
+      setLoadingSearch(false);
+      console.log("Fetch search location failed:", error);
+    }
+  };
+
   return (
     <View style={{flex: 1}}>
-      {!loading && washrooms &&
-        <MapView
-          style={{width: '100%', height: '100%'}}
-          initialRegion={initialRegion}
-          mapPadding={{top:100}}
-          showsUserLocation={true}>
+      {loading
+      ?
+        <View style={styles.mapLoadingContainer}>
+          <ActivityIndicator size="large" />
+          <Text style={styles.mapLoadingText}>Fetching map data...</Text>
+        </View>
+      :
+        washrooms &&
+        <View>
+          <MapView
+            style={{width: '100%', height: '100%'}}
+            region={region}
+            mapPadding={{top:100}}
+            showsUserLocation={true}
+            ref={mapRef}
+          >
           {washrooms.map((washroom) => {
             return (
               <MapMarker
@@ -87,20 +120,30 @@ export default HomeScreen = ({navigation}) => {
                   )}
               />);
           })}
-        </MapView>
+          </MapView>
+          <View style={styles.container}>
+            <View style={styles.searchBar}>
+            <TextInput
+              style={styles.input}
+              placeholder="Search for a place or address"
+              value={searchLocation}
+              onChangeText={setSearchLocation}
+            />
+            <Pressable style={styles.searchButton} onPress={!loadingSearch ? fetchSearchLocation : null}>
+              {!loadingSearch
+              ?
+                <Text>Search</Text>
+              :
+                <ActivityIndicator />}
+            </Pressable>
+            </View>
+            <TouchableOpacity onPress={() => navigation.navigate('News')} style={styles.announcement}>
+              <Text style={styles.announcementText}>Announcements</Text>
+            </TouchableOpacity>
+          </View>
+          <NavBar navigation={navigation}/>
+        </View>
       }
-      <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder="Search for a place or address"
-          value={searchLocation}
-          onChangeText={setSearchLocation}
-        />
-        <TouchableOpacity onPress={()=> navigation.navigate('News')} style={styles.announcement}>
-          <Text style={styles.announcementText}>Announcements</Text>
-        </TouchableOpacity>
-      </View>
-      <NavBar navigation={navigation}/>
     </View>
   );
 };
@@ -114,15 +157,35 @@ const styles = StyleSheet.create({
     width: '100%',
     marginLeft: '5%',
   },
+  mapLoadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  mapLoadingText: {
+    fontSize: 24,
+  },
+  searchBar: {
+    flexDirection: 'row',
+  },
   input: {
     backgroundColor: 'white',
     height: 40,
-    width: '90%',
+    width: '70%',
     borderRadius: 30,
     borderColor: 'red',
     borderWidth: 0,
     padding: 10,
     fontSize: 16,
+  },
+  searchButton: {
+    backgroundColor: 'white',
+    height: 40,
+    width: '20%',
+    marginLeft: 5,
+    padding: 10,
+    borderRadius: 20,
+    alignItems: 'center'
   },
   announcement: {
     backgroundColor: 'red',
