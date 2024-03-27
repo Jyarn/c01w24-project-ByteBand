@@ -43,22 +43,23 @@ app.post("/initdatabase", express.json(), async(req, res) => {
   const washroomCollection = db.collection(COLLECTIONS.washrooms);
   try {
     await washroomCollection.drop({ }); // reset database
-    await washroomCollection.insertMany([{
-      address: "755 Morningside Ave, Scarborough",
-      googleAddress: "755 Morningside Ave, Scarborough, ON M1C 4Z4",
-      useSchedule: false,
-      overrideStatus: false,
-      status: "Washroom yucky",
-      times: {
-        "Sunday": [],
-        "Monday": [],
-        "Tuesday": [],
-        "Wednesday": [],
-        "Thursday": [],
-        "Friday": [],
-        "Saturday": [],
-      }
-    },
+    await washroomCollection.insertMany([
+      {
+        address: "755 Morningside Ave, Scarborough",
+        googleAddress: "755 Morningside Ave, Scarborough, ON M1C 4Z4",
+        useSchedule: false,
+        overrideStatus: false,
+        status: "Washroom yucky",
+        times: {
+          "Sunday": [],
+          "Monday": [],
+          "Tuesday": [],
+          "Wednesday": [],
+          "Thursday": [],
+          "Friday": [],
+          "Saturday": [],
+        }
+      },
       {
         address: "1265 Military Trail, Scarborough",
         googleAddress: "1265 Military Trail, Scarborough, ON M1C 1A4",
