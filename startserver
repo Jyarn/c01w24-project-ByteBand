@@ -1,3 +1,4 @@
+[ -d data/db ] || mkdir -p data/db
 mongod --dbpath data/db&
 cd backend
 npm start
