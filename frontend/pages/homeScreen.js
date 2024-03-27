@@ -78,7 +78,14 @@ export default HomeScreen = ({navigation}) => {
           mapPadding={{top:100}}
           showsUserLocation={true}>
           {washrooms.map((washroom) => {
-            return <MapMarker key={washroom._id} washroom={washroom} />
+            return (
+              <MapMarker
+                  key={washroom._id}
+                  washroom={washroom}
+                  onPress={() => (
+                    navigation.navigate("WashroomInfo", {washroomId:washroom._id})
+                  )}
+              />);
           })}
         </MapView>
       }

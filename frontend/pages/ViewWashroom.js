@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   Linking,
 } from "react-native";
+import AddRatings from "./addRatings";
+import DisplayRatings from "./displayRatings";
 import { SERVER_URL } from "../constants/constants";
 
 function parseOpenTimes(id, key, openTimes, bolden) {
@@ -51,16 +53,17 @@ function parseContact(id, key, contacts) {
   );
 }
 
-const ViewWashroom = ({ washroomid }) => {
-  // Get schedule from backend
+const ViewWashroom = ({ route }) => {
   const [status, setStatus] = useState(null);
   const [response, setResponse] = useState(null);
   const [displayTimes, setDisplayTimesFlag] = useState(false);
+
+  const washroomId = route.params.washroomId;
   const currentDate = new Date("Tue Mar 26 2024 17:06:22");
 
   useEffect(() => {
     const getSchedule = async () => {
-      const res = await fetch(`${SERVER_URL}/getWashroomInfo/${washroomid}?day=${currentDate.getDay()}&hr=${currentDate.getHours()}&min=${currentDate.getMinutes()}`, {
+      const res = await fetch(`${SERVER_URL}/getWashroomInfo/${washroomId}?day=${currentDate.getDay()}&hr=${currentDate.getHours()}&min=${currentDate.getMinutes()}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -140,6 +143,8 @@ const ViewWashroom = ({ washroomid }) => {
             </View>
           </View>
         </View>
+        <AddRatings washroomId="66038e852abfe3207ba688a5"/>
+        <DisplayRatings washroomId="66038e852abfe3207ba688a5"/>
       </ScrollView>
     );
   }
