@@ -10,7 +10,7 @@ export default NavBar = ({ navigation }) => {
                 imageSource={require('../images/add.png')}
             />
             <ImageButton 
-                onPress={() => navigation.navigate('WashroomTimes')} 
+                onPress={() => navigation.navigate('WashroomInfo')} 
                 imageStyle={styles.icon} 
                 imageSource={require('../images/schedule.png')} 
             />

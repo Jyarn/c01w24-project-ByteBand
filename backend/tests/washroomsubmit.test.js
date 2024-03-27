@@ -2,7 +2,8 @@ import { MongoClient } from "mongodb";
 import {
   SERVER_URL,
   MONGO_URL,
-  DB_NAME
+  DB_NAME,
+  COLLECTIONS
 } from "../constants/constants.js";
 
 let db;
@@ -23,7 +24,7 @@ beforeAll(async () => {
 });
 
 beforeEach(async () => {
-  const coll = db.collection("Washroom Submissions");
+  const coll = db.collection(COLLECTIONS.washroomSubmissions);
   try {
       await coll.drop({ }); // reset database
   } catch (error) {

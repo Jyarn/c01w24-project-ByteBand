@@ -2,7 +2,7 @@ import React from "react";
 
 import DonatorForm from "./pages/donatorForm";
 import Donation from "./pages/Donation";
-import UploadWashroomtime from "./pages/uploadWashroomtime";
+import ViewWashroom from "./pages/ViewWashroom";
 import BusinessAcknowledgement from "./pages/businessAcknowledgement";
 import AddWashrooms from "./pages/addWashrooms";
 import SelectUser from "./pages/selectUser";
@@ -29,8 +29,8 @@ const App = () => {
           options={{headerShown: false }}
         />
         <Stack.Screen
-          name="WashroomTimes"
-          component={UploadWashroomtime}
+          name="WashroomInfo"
+          component={ViewWashroom}
         />
         <Stack.Screen
           name="SelectUser"

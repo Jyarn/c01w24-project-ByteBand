@@ -43,35 +43,26 @@ app.post("/initdatabase", express.json(), async(req, res) => {
   const washroomCollection = db.collection(COLLECTIONS.washrooms);
   try {
     await washroomCollection.drop({ }); // reset database
-    await washroomCollection.insertMany([{
-      address: "1587 Marshall Street, Baltimore",
-      useSchedule: false,
-      overrideStatus: false,
-      status: "Washroom yucky",
-      times: {
-        "Sunday": [],
-        "Monday": [],
-        "Tuesday": [],
-        "Wednesday": [],
-        "Thursday": [],
-        "Friday": [],
-        "Saturday": [],
-      },
-      "ratings": [
-        {
-          "rating": "5",
-          "feedback": "Great!",
-          "date": "2024-03-27"
-        },
-        {
-          "rating": "4",
-          "feedback": "Good!",
-          "date": "2023-03-27"
-        },
-      ]
-    },
+    await washroomCollection.insertMany([
       {
-        address: "2571 Heron Way, Salem",
+        address: "755 Morningside Ave, Scarborough",
+        googleAddress: "755 Morningside Ave, Scarborough, ON M1C 4Z4",
+        useSchedule: false,
+        overrideStatus: false,
+        status: "Washroom yucky",
+        times: {
+          "Sunday": [],
+          "Monday": [],
+          "Tuesday": [],
+          "Wednesday": [],
+          "Thursday": [],
+          "Friday": [],
+          "Saturday": [],
+        }
+      },
+      {
+        address: "1265 Military Trail, Scarborough",
+        googleAddress: "1265 Military Trail, Scarborough, ON M1C 1A4",
         useSchedule: false,
         overrideStatus: true,
         status: "Hunting witches",
@@ -83,18 +74,10 @@ app.post("/initdatabase", express.json(), async(req, res) => {
           "Thursday": [],
           "Friday": [],
           "Saturday": [],
-        },
-        "ratings": [
-          {
-            "rating": "4",
-            "feedback": "Nice!",
-            "date": "2024-03-27"
-          },
-        ]
+        }
       }
     ]);
-
-    res.status(200);
+    res.status(200).json({ response: "Database successfully initialised." });
   } catch (error) {
     res.status(400);
     console.log(error.message);
@@ -191,7 +174,6 @@ app.get("/getWashroomInfo/:id", express.json(), async (req, res) => {
     const daymap = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const timehash = Number(hr)*60 + Number(min);
     let open = null;     // is the washroom open
-    let i = 0;          // variable to help find the correct day
 
     for (const d in times) {
       times[d].forEach((time) => {
@@ -202,11 +184,11 @@ app.get("/getWashroomInfo/:id", express.json(), async (req, res) => {
         if (d == daymap[day] && start <= timehash && timehash <= end)
           open = time;
       });
-
-      i++;
     }
 
     return res.status(200).json({
+      contact: data.contact,
+      name: data.name,
       openTimes: times,
       open: open,
       useSchedule: data.useSchedule,            // true - use openTimes to calculate whether the washroom is open
@@ -255,7 +237,7 @@ app.get("/getRating/:washroomId", express.json(), async (req, res) => {
   
       const collection = db.collection(COLLECTIONS.washrooms);
       const washroom = await collection.findOne({ _id: new ObjectId(washroomId) });
-  
+
       if (!washroom) {
         return res.status(404).json({ error: "Washroom not found." });
       }
