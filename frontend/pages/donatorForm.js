@@ -79,8 +79,8 @@ const DonatorForm = ({ navigation }) => {
         }
         const users = await getUsers();
         users[name] = user;
-
         storeUsers(users);
+        navigation.navigate('SelectUser')
     };
 
     return (
