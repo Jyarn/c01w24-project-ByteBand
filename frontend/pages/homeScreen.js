@@ -8,24 +8,58 @@ import {
   Alert,
 } from "react-native";
 import MapView from "react-native-maps";
-import NavBar from "../components/navBar"
+import NavBar from "../components/navBar";
+import * as Location from "expo-location";
+
+const DEFAULT_REGION = {
+  latitude: 43.7824,
+  longitude: -79.1863,
+  latitudeDelta: 0.015,
+  longitudeDelta: 0.015,
+}
 
 export default HomeScreen = ({navigation}) => {
+  const [initialRegion, setInitialRegion] = useState(null);
   //currently this does nothing as we can't search locations
   const [searchLocation, setSearchLocation] = useState("");
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getUserLocation = async () => {
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.log("Permissions to access location was denied.");
+          setInitialRegion(DEFAULT_REGION);
+        } else {
+          let location = await Location.getCurrentPositionAsync({});
+          setInitialRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.015,
+          });
+        }
+      } catch (error) {
+        console.log("getUserLocation failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getUserLocation();
+  }, []);
 
   return (
     <View style={{flex: 1}}>
-      <MapView
-        style={{width: '100%', height: '100%'}}
-        initialRegion={{
-          latitude: 43.7824,
-          longitude: -79.1863,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.015,
-        }}
-        mapPadding={{top:100, left: 315}}
-      />
+      {!loading &&
+        <MapView
+          style={{width: '100%', height: '100%'}}
+          initialRegion={initialRegion}
+          mapPadding={{top:100}}
+          showsUserLocation={true}>
+        </MapView>
+      }
       <View style={styles.container}>
         <TextInput
           style={styles.input}
@@ -37,7 +71,6 @@ export default HomeScreen = ({navigation}) => {
           <Text style={styles.announcementText}>Announcements</Text>
         </TouchableOpacity>
       </View>
-
       <NavBar navigation={navigation}/>
     </View>
   );
