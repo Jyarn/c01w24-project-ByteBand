@@ -44,7 +44,8 @@ app.post("/initdatabase", express.json(), async(req, res) => {
   try {
     await washroomCollection.drop({ }); // reset database
     await washroomCollection.insertMany([{
-      address: "1587 Marshall Street, Baltimore",
+      address: "755 Morningside Ave, Scarborough",
+      googleAddress: "755 Morningside Ave, Scarborough, ON M1C 4Z4",
       useSchedule: false,
       overrideStatus: false,
       status: "Washroom yucky",
@@ -59,7 +60,8 @@ app.post("/initdatabase", express.json(), async(req, res) => {
       }
     },
       {
-        address: "2571 Heron Way, Salem",
+        address: "1265 Military Trail, Scarborough",
+        googleAddress: "1265 Military Trail, Scarborough, ON M1C 1A4",
         useSchedule: false,
         overrideStatus: true,
         status: "Hunting witches",
@@ -74,8 +76,7 @@ app.post("/initdatabase", express.json(), async(req, res) => {
         }
       }
     ]);
-
-    res.status(200);
+    res.status(200).json({ response: "Database successfully initialised." });
   } catch (error) {
     res.status(400);
     console.log(error.message);

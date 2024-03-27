@@ -5,11 +5,12 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import MapView from "react-native-maps";
-import NavBar from "../components/navBar";
 import * as Location from "expo-location";
+import NavBar from "../components/navBar";
+import MapMarker from "../components/mapMarker";
+import { SERVER_URL } from "../constants/constants";
 
 const DEFAULT_REGION = {
   latitude: 43.7824,
@@ -19,12 +20,29 @@ const DEFAULT_REGION = {
 }
 
 export default HomeScreen = ({navigation}) => {
+  const [washrooms, setWashrooms] = useState(undefined);
   const [initialRegion, setInitialRegion] = useState(null);
   //currently this does nothing as we can't search locations
   const [searchLocation, setSearchLocation] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const getWashrooms = async () => {
+      try {
+        await fetch(`${SERVER_URL}/getAllWashrooms`).then(async (response) => {
+          if (!response.ok) {
+            console.log("Server failed:", response.status);
+          } else {
+            await response.json().then((data) => {
+              setWashrooms(data.response);
+            })
+          }
+        });
+      } catch (error) {
+        console.log("Fetch function failed:", error);
+      }
+    };
+
     const getUserLocation = async () => {
       try {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -41,23 +59,27 @@ export default HomeScreen = ({navigation}) => {
           });
         }
       } catch (error) {
-        console.log("getUserLocation failed:", error);
+        console.log("Get user location failed:", error);
       } finally {
         setLoading(false);
       }
     };
 
+    getWashrooms();
     getUserLocation();
   }, []);
 
   return (
     <View style={{flex: 1}}>
-      {!loading &&
+      {!loading && washrooms &&
         <MapView
           style={{width: '100%', height: '100%'}}
           initialRegion={initialRegion}
           mapPadding={{top:100}}
           showsUserLocation={true}>
+          {washrooms.map((washroom) => {
+            return <MapMarker key={washroom._id} washroom={washroom} />
+          })}
         </MapView>
       }
       <View style={styles.container}>
