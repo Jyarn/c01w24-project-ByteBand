@@ -3,25 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 
 import { SERVER_URL } from "../constants/constants";
 
-const DisplayRatings = ({ washroomId }) => {
-  const [ratings, setRatings] = useState([]);
-
-  useEffect(() => {
-    const fetchRatings = async () => {
-      try {
-        const response = await fetch(`${SERVER_URL}/getRating/${washroomId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch ratings');
-        }
-        const data = await response.json();
-        setRatings(Array.isArray(data.ratings) ? data.ratings : []);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
-    fetchRatings();
-  }, [washroomId]);
-
+const DisplayRatings = ({ ratings }) => {
   const calculateAverageRating = () => {
     if (ratings.length === 0) return "No ratings";
     const sum = ratings.reduce((acc, curr) => acc + Number(curr.rating), 0);

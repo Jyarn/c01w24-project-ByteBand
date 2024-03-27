@@ -143,8 +143,8 @@ const ViewWashroom = ({ route }) => {
             </View>
           </View>
         </View>
-        <AddRatings washroomId="66038e852abfe3207ba688a5"/>
-        <DisplayRatings washroomId="66038e852abfe3207ba688a5"/>
+        <AddRatings washroomId={washroomId} />
+        <DisplayRatings ratings={response.ratings} />
       </ScrollView>
     );
   }
