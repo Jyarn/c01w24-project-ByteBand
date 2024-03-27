@@ -7,7 +7,8 @@ import {
   StyleSheet,
 } from "react-native";
 import { RadioButton } from 'react-native-paper';
-import { SERVER_URL } from "../constants/constants";
+import { SERVER_URL } from "../constants/constants.js";
+
 import ProvinceSelector from "../components/provinceSelector";
 import ImageButton from "../components/imageButton";
 
