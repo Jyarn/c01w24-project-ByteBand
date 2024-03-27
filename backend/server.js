@@ -172,7 +172,6 @@ app.get("/getWashroomInfo/:id", express.json(), async (req, res) => {
     const daymap = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
     const timehash = Number(hr)*60 + Number(min);
     let open = null;     // is the washroom open
-    let i = 0;          // variable to help find the correct day
 
     for (const d in times) {
       times[d].forEach((time) => {
@@ -183,11 +182,11 @@ app.get("/getWashroomInfo/:id", express.json(), async (req, res) => {
         if (d == daymap[day] && start <= timehash && timehash <= end)
           open = time;
       });
-
-      i++;
     }
 
     return res.status(200).json({
+      contact: data.contact,
+      name: data.name,
       openTimes: times,
       open: open,
       useSchedule: data.useSchedule,            // true - use openTimes to calculate whether the washroom is open
@@ -210,20 +209,20 @@ app.patch("/postRating/:washroomId", express.json(), async (req, res) => {
       if (!ObjectId.isValid(washroomId)) {
         return res.status(400).json({ error: "Invalid washroom ID." });
       }
-  
-      // assuming both rating and feedback are required  
+
+      // assuming both rating and feedback are required
       // ### may want to store the user who submitted the rating ###
       const { rating, feedback } = req.body;
       if(!rating || !feedback) {
         return res.status(400).json({ error: "Rating and feedback are required." });
       }
-  
+
       // find the washroom by ID
       const collection = db.collection(COLLECTIONS.washroomSubmissions);
       const updateResult = await collection.updateOne(
         { _id: new ObjectId(washroomId) },
         { $push: { ratings: { rating, feedback, date: new Date() } } } );
-  
+
       if (updateResult.modifiedCount === 0) {
         return res.status(404).json({ error: "Washroom not found." });
       }
@@ -240,11 +239,11 @@ app.get("/getRating/:washroomId", express.json(), async (req, res) => {
       if (!ObjectId.isValid(washroomId)) {
         return res.status(400).json({ error: "Invalid washroom ID." });
       }
-  
+
       // find the washroom by ID
       const collection = db.collection(COLLECTIONS.washroomSubmissions);
       const washroom = await collection.findOne({ _id: new ObjectId(washroomId) });
-  
+
       if (!washroom) {
         return res.status(404).json({ error: "Washroom not found." });
       }
