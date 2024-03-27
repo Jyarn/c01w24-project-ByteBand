@@ -259,7 +259,7 @@ app.get("/getRating/:washroomId", express.json(), async (req, res) => {
       if (!washroom) {
         return res.status(404).json({ error: "Washroom not found." });
       }
-      res.status(200).json({ ratings: washroom.ratings });
+      res.status(200).json({ ratings: washroom.ratings || [] });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
