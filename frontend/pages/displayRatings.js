@@ -14,12 +14,11 @@ const DisplayRatings = ({ washroomId }) => {
           throw new Error('Failed to fetch ratings');
         }
         const data = await response.json();
-        setRatings(data.ratings);
+        setRatings(Array.isArray(data.ratings) ? data.ratings : []);
       } catch (error) {
         console.error('Error:', error);
       }
     };
-
     fetchRatings();
   }, [washroomId]);
 
@@ -35,7 +34,7 @@ const DisplayRatings = ({ washroomId }) => {
       <Text style={styles.averageRatingText}>Average Rating: {calculateAverageRating()}</Text>
       {ratings.map((rating, index) => (
         <View key={index} style={styles.rating}>
-          <Text style={styles.ratingText}>Rating: {rating.rating} Stars</Text>
+          {/* <Text style={styles.ratingText}>Rating: {rating.rating} Stars</Text> */}
           <Text style={styles.feedbackText}>Feedback: {rating.feedback}</Text>
           <Text style={styles.feedbackText}>Date: {rating.date}</Text>
         </View>
@@ -72,7 +71,7 @@ const styles = StyleSheet.create({
   },
   feedbackText: {   
     marginTop: 5, 
-    fontSize: 14, 
+    fontSize: 16, 
     color: '#666',
     fontStyle: 'italic', 
   },

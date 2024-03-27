@@ -7,8 +7,8 @@ const Ratings = ({ navigation }) => {
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
             <View style={{ flex: 1 }}>
-                <AddRatings washroomId="6603226fbfcadd5d3e3356b3"/>
-                <DisplayRatings washroomId="6603226fbfcadd5d3e3356b3"/>
+                <AddRatings washroomId="66039f018e73a18092a25b24"/>
+                <DisplayRatings washroomId="66039f018e73a18092a25b24"/>
             </View>
         </ScrollView>
     );
