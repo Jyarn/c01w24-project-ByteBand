@@ -202,28 +202,22 @@ app.get("/getWashroomInfo/:id", express.json(), async (req, res) => {
   }
 });
 
-// Post a washroom rating and feedback to the database
 app.patch("/postRating/:washroomId", express.json(), async (req, res) => {
     try {
-      // check if washroom ID is valid
       const washroomId = req.params.washroomId;
       if (!ObjectId.isValid(washroomId)) {
         return res.status(400).json({ error: "Invalid washroom ID." });
       }
-
-      // assuming both rating and feedback are required
-      // ### may want to store the user who submitted the rating ###
       const { rating, feedback } = req.body;
       if(!rating || !feedback) {
         return res.status(400).json({ error: "Rating and feedback are required." });
       }
 
-      // find the washroom by ID
-      const collection = db.collection(COLLECTIONS.washroomSubmissions);
+      const collection = db.collection(COLLECTIONS.washrooms);
       const updateResult = await collection.updateOne(
         { _id: new ObjectId(washroomId) },
-        { $push: { ratings: { rating, feedback, date: new Date() } } } );
-
+        { $push: { ratings: { rating, feedback, date: new Date().toISOString().split('T')[0] } } } );
+  
       if (updateResult.modifiedCount === 0) {
         return res.status(404).json({ error: "Washroom not found." });
       }
@@ -235,14 +229,12 @@ app.patch("/postRating/:washroomId", express.json(), async (req, res) => {
 
 app.get("/getRating/:washroomId", express.json(), async (req, res) => {
     try {
-      // check if washroom ID is valid
       const washroomId = req.params.washroomId;
       if (!ObjectId.isValid(washroomId)) {
         return res.status(400).json({ error: "Invalid washroom ID." });
       }
-
-      // find the washroom by ID
-      const collection = db.collection(COLLECTIONS.washroomSubmissions);
+  
+      const collection = db.collection(COLLECTIONS.washrooms);
       const washroom = await collection.findOne({ _id: new ObjectId(washroomId) });
 
       if (!washroom) {
