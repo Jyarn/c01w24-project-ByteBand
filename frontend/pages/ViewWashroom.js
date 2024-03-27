@@ -51,7 +51,7 @@ function parseContact(id, key, contacts) {
   );
 }
 
-const ViewWashroom = ({ id }) => {
+const ViewWashroom = ({ washroomid }) => {
   // Get schedule from backend
   const [status, setStatus] = useState(null);
   const [response, setResponse] = useState(null);
@@ -60,7 +60,7 @@ const ViewWashroom = ({ id }) => {
 
   useEffect(() => {
     const getSchedule = async () => {
-      const res = await fetch(`${SERVER_URL}/getWashroomInfo/65fd03a29ecfff95ed64560a?day=${currentDate.getDay()}&hr=${currentDate.getHours()}&min=${currentDate.getMinutes()}`, {
+      const res = await fetch(`${SERVER_URL}/getWashroomInfo/${washroomid}?day=${currentDate.getDay()}&hr=${currentDate.getHours()}&min=${currentDate.getMinutes()}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
