@@ -2,7 +2,7 @@ import React from "react";
 
 import DonatorForm from "./pages/donatorForm";
 import Donation from "./pages/Donation";
-import UploadWashroomtime from "./pages/uploadWashroomtime";
+import ViewWashroom from "./pages/ViewWashroom";
 import BusinessAcknowledgement from "./pages/businessAcknowledgement";
 import AddWashrooms from "./pages/addWashrooms";
 import SelectUser from "./pages/selectUser";
@@ -13,6 +13,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
+import { SERVER_URL } from "./constants/constants";
 
 const App = () => {
   return (
@@ -30,7 +31,7 @@ const App = () => {
         />
         <Stack.Screen
           name="WashroomTimes"
-          component={UploadWashroomtime}
+          component={ViewWashroom}
         />
         <Stack.Screen
           name="SelectUser"
