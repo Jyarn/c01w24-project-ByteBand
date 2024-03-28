@@ -137,9 +137,6 @@ export default HomeScreen = ({navigation}) => {
                 <ActivityIndicator />}
             </Pressable>
             </View>
-            <TouchableOpacity onPress={() => navigation.navigate('News')} style={styles.announcement}>
-              <Text style={styles.announcementText}>Announcements</Text>
-            </TouchableOpacity>
           </View>
           <NavBar navigation={navigation}/>
         </View>
@@ -186,21 +183,6 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     alignItems: 'center'
-  },
-  announcement: {
-    backgroundColor: 'red',
-    height: 40,
-    maxWidth: '38%',
-    marginTop: 10,
-    borderRadius: 10,
-    borderColor: 'red',
-    paddingLeft: 10,
-    borderWidth: 3,
-    justifyContent: 'center'
-  },
-  announcementText: {
-    fontSize: 16,
-    color: 'white',
   },
   navBar: {
     flexDirection: 'row',
