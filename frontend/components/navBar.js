@@ -10,7 +10,7 @@ export default NavBar = ({ navigation }) => {
                 imageSource={require('../images/add.png')}
             />
             <ImageButton
-                onPress={() => navigation.navigate('Donation')}
+                onPress={() => navigation.navigate('SelectUser')}
                 imageStyle={styles.icon}
                 imageSource={require('../images/donation.png')}
             />
