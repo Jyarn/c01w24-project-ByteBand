@@ -48,7 +48,7 @@ app.post("/initdatabase", express.json(), async(req, res) => {
         googleAddress: "755 Morningside Ave, Scarborough, ON M1C 4Z4",
         useSchedule: false,
         overrideStatus: false,
-        status: "Washroom yucky",
+        status: "Washroom is clean",
         times: {
           "Sunday": [],
           "Monday": [],
@@ -65,7 +65,7 @@ app.post("/initdatabase", express.json(), async(req, res) => {
         googleAddress: "1265 Military Trail, Scarborough, ON M1C 1A4",
         useSchedule: false,
         overrideStatus: true,
-        status: "Hunting witches",
+        status: "Closed for easter",
         times: {
           "Sunday": [{ "start": 540, "end": 1350 }],
           "Monday": [],
