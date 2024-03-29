@@ -6,6 +6,7 @@ import {
   ScrollView,
   StatusBar,
 } from "react-native";
+import uuid from "react-native-uuid";
 import BusinessLogo from "../components/businessLogo";
 import { Client } from "../prismic.js";
 import ImageButton from "../components/imageButton.js";
@@ -21,7 +22,10 @@ const BusinessAcknowledgement = ({ navigation }) => {
         Client.getSingle("business_acknowledgement").then((doc) => {
           let businesses = [];
           for (const business of doc.data.businesses) {
-            businesses.push({ id: business.logo.id, logo: business.logo.url })
+            // Check if business has a logo
+            if (Object.keys(business.logo).length !== 0) {
+              businesses.push({ id: uuid.v4(), logo: business.logo.url })
+            }
           }
           getBusinessState(businesses);
         });
