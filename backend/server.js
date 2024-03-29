@@ -64,8 +64,8 @@ app.post("/initdatabase", express.json(), async(req, res) => {
         name: "University of Toronto Scarborough",
         address: "1265 Military Trail, Scarborough",
         googleAddress: "1265 Military Trail, Scarborough, ON M1C 1A4",
-        useSchedule: false,
-        overrideStatus: true,
+        useSchedule: true,
+        overrideStatus: false,
         status: "Closed for easter",
         times: {
           "Sunday": [{ "start": 540, "end": 1350 }],
@@ -76,8 +76,8 @@ app.post("/initdatabase", express.json(), async(req, res) => {
           "Friday": [],
           "Saturday": [],
         },
-        ratings:[
-          { rating: 5, feedback: "Great! },
+        ratings: [
+          { rating: 5, feedback: "Great!" },
         ],
         contact: {
           "Phone Number": {
@@ -85,8 +85,8 @@ app.post("/initdatabase", express.json(), async(req, res) => {
             link: "9",
           },
           "Website": {
-            text: "Website",
-            link: "https://www.utsc.utoronto.ca/home/"
+            link: "https://www.utsc.utoronto.ca/home/",
+            text: "utsc.utoronto.ca"
           }
         },
       }
