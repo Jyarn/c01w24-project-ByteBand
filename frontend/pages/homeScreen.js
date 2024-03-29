@@ -98,6 +98,9 @@ export default HomeScreen = ({ navigation }) => {
       {loading
         ?
         <View style={styles.mapLoadingContainer}>
+          <Image source={require('../images/gohereLogo.jpg')}
+            style={{ height: 100, width: 100, borderRadius: 5 }}
+          />
           <ActivityIndicator size="large" />
           <Text style={styles.mapLoadingText}>Fetching map data...</Text>
         </View>
@@ -158,7 +161,8 @@ const styles = StyleSheet.create({
   mapLoadingContainer: {
     flex: 1,
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    gap: 20,
   },
   mapLoadingText: {
     fontSize: 24,
