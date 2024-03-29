@@ -61,6 +61,7 @@ app.post("/initdatabase", express.json(), async(req, res) => {
         ratings: []
       },
       {
+        name: "University of Toronto Scarborough",
         address: "1265 Military Trail, Scarborough",
         googleAddress: "1265 Military Trail, Scarborough, ON M1C 1A4",
         useSchedule: false,
@@ -75,7 +76,19 @@ app.post("/initdatabase", express.json(), async(req, res) => {
           "Friday": [],
           "Saturday": [],
         },
-        ratings:[]
+        ratings:[
+          { rating: 5, feedback: "Great! },
+        ],
+        contact: {
+          "Phone Number": {
+            text: "111-111-1111",
+            link: "9",
+          },
+          "Website": {
+            text: "Website",
+            link: "https://www.utsc.utoronto.ca/home/"
+          }
+        },
       }
     ]);
     res.status(200).json({ response: "Database successfully initialised." });
