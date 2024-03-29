@@ -54,14 +54,14 @@ const SelectUser = ({ navigation }) => {
             setUsers(await getUsers());
         }
         loadUsers();
-    }, []);
+    }, [users]);
 
     return (
         <View style={styles.container}>
             <View style={{ flex: 1 }}>
                 <View style={{flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 20}}>
                     <ImageButton
-                        onPress={() => navigation.navigate('HomeScreen')} //needs to be set properly
+                        onPress={() => navigation.navigate('Home')}
                         imageStyle={{ height: 30, width: 30 }}
                         imageSource={require('../images/back.png')}
                     />
@@ -106,7 +106,6 @@ const SelectUser = ({ navigation }) => {
             </View>
             {selected == "" ? <View />
                 : <TouchableOpacity onPress={() => {
-                    // Replace "console.log" with navigation code
                     navigation.navigate('Donation', { userName: selected });
                   }} style={styles.submitButton}>
                     <Text style={styles.submitText}>Donate</Text>
@@ -192,7 +191,6 @@ const styles = StyleSheet.create({
         width: '40%',
         marginLeft: "30%",
         marginBottom: '5%',
-        top:-100,
     },
     submitText: {
         color: "white",

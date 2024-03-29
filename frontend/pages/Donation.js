@@ -84,7 +84,7 @@ const Donation = ({ route, navigation }) => {
         }}
       >
         <ImageButton
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("SelectUser")}
           imageStyle={{ height: 30, width: 30 }}
           imageSource={require("../images/back.png")}
         />
