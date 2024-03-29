@@ -71,7 +71,7 @@ const AddWashrooms = ({ navigation }) => {
     const body = await res.json();
 
     if (res.status == 200) {
-      // do something
+      navigation.navigate('Home');
     } else {
       console.log(`failed to submit washroom application (${body.error})`);
     }
@@ -217,7 +217,7 @@ const styles = StyleSheet.create({
   },
 
   invis: {
-    color: "white",
+    opacity: 0,
   },
   errorText: {
     color: "red",

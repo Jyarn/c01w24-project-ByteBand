@@ -139,8 +139,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 40,
     margin: 12,
-    borderWidth: 1,
+    borderWidth: 0.5,
     padding: 10,
+    borderRadius: 15,
   },
   submitButton: {
     marginTop: 20,

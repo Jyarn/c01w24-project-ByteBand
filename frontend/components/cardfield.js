@@ -161,7 +161,7 @@ const CardField = ({ onCardChange }) => {
           />
           <TextInput
             style={styles.zipInput}
-            placeholder=" Zip Code"
+            placeholder=" Postal Code"
             maxLength={12}
             keyboardType="default"
             value={zip}

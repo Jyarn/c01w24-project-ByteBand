@@ -5,6 +5,7 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
+  Image,
   Pressable,
   ActivityIndicator
 } from "react-native";
@@ -21,7 +22,7 @@ const DEFAULT_REGION = {
   longitudeDelta: 0.015,
 }
 
-export default HomeScreen = ({navigation}) => {
+export default HomeScreen = ({ navigation }) => {
   const [washrooms, setWashrooms] = useState(undefined);
   const [region, setRegion] = useState(null);
   const [searchLocation, setSearchLocation] = useState("");
@@ -93,52 +94,52 @@ export default HomeScreen = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
       {loading
-      ?
+        ?
         <View style={styles.mapLoadingContainer}>
           <ActivityIndicator size="large" />
           <Text style={styles.mapLoadingText}>Fetching map data...</Text>
         </View>
-      :
+        :
         washrooms &&
         <View>
           <MapView
-            style={{width: '100%', height: '100%'}}
+            style={{ width: '100%', height: '100%' }}
             region={region}
-            mapPadding={{top:100}}
+            mapPadding={{ top: 100, bottom: 100 }}
             showsUserLocation={true}
             ref={mapRef}
           >
-          {washrooms.map((washroom) => {
-            return (
-              <MapMarker
+            {washrooms.map((washroom) => {
+              return (
+                <MapMarker
                   key={washroom._id}
                   washroom={washroom}
                   onPress={() => (
-                    navigation.navigate("WashroomInfo", {washroomId:washroom._id})
+                    navigation.navigate("WashroomInfo", { washroomId: washroom._id })
                   )}
-              />);
-          })}
+                />);
+            })}
           </MapView>
           <View style={styles.container}>
             <View style={styles.searchBar}>
-            <TextInput
-              style={styles.input}
-              placeholder="Search for a place or address"
-              value={searchLocation}
-              onChangeText={setSearchLocation}
-            />
-            <Pressable style={styles.searchButton} onPress={!loadingSearch ? fetchSearchLocation : null}>
-              {!loadingSearch
-              ?
-                <Text>Search</Text>
-              :
-                <ActivityIndicator />}
-            </Pressable>
+              <TextInput
+                style={styles.input}
+                placeholder="Search for a place or address"
+                value={searchLocation}
+                onChangeText={setSearchLocation}
+              />
+              <Pressable style={styles.searchButton} onPress={!loadingSearch ? fetchSearchLocation : null}>
+                {!loadingSearch
+                  ?
+                  <Text>Search</Text>
+                  :
+                  <ActivityIndicator />}
+              </Pressable>
             </View>
           </View>
-          <NavBar navigation={navigation}/>
+          <NavBar navigation={navigation} />
         </View>
       }
     </View>
@@ -183,20 +184,5 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 20,
     alignItems: 'center'
-  },
-  navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
-    backgroundColor: 'white',
-    position: 'absolute',
-    bottom: 10,
-    left: '5%',
-    height: '10%',
-    width: '90%',
-    alignSelf: 'flex-end',
-    borderRadius: 20,
-    borderColor: 'red',
-    borderWidth: 3,
   },
 });

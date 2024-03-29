@@ -196,7 +196,7 @@ const Donation = ({ route, navigation }) => {
               style={styles.homeButton}
               onPress={() => navigation.navigate("SelectUser")}
             >
-              <Text style={styles.homeButtonText}>Home</Text>
+              <Text style={styles.homeButtonText}>Close</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         position: 'absolute',
-        bottom: 30,
+        bottom: 20,
         left: '10%',
         height: '10%',
         width: '80%',
@@ -47,6 +47,6 @@ const styles = StyleSheet.create({
     icon: {
         height: 50,
         width: 50,
-        tintColor: 'red',
+        tintColor: '#FF3B30',
     }
 })

@@ -20,6 +20,8 @@ DB_COLLECTIONS='// Database collection names
 export const COLLECTIONS = {
   washroomSubmissions: "Washroom Submissions",
   washrooms: "Washrooms",
+  donation: "Donations",
+  donators: "Donators",
 };'
 
 
