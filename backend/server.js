@@ -206,14 +206,16 @@ app.patch("/postRating/:washroomId", express.json(), async (req, res) => {
       }
 
       const collection = db.collection(COLLECTIONS.washrooms);
-      const updateResult = await collection.updateOne(
+      const updateResult = await collection.findOneAndUpdate(
         { _id: new ObjectId(washroomId) },
-        { $push: { ratings: { rating, feedback, date: new Date().toISOString().split('T')[0] } } } );
-  
-      if (updateResult.modifiedCount === 0) {
+        { $push: { ratings: { rating, feedback, date: new Date().toISOString().split('T')[0] } } },
+        { returnDocument: "after"});
+
+      if (updateResult == null) {
         return res.status(404).json({ error: "Washroom not found." });
       }
-      res.status(200).json({ message: "Rating and feedback added successfully." });
+
+      res.status(200).json({ ratings: updateResult.ratings, message: "Thanks for the feedback!" });
     } catch (error) {
       res.status(500).json({ error: error.message });
     }
@@ -234,27 +236,27 @@ app.post("/submitDonation", express.json(), async (req, res) => {
     const totalDonationsDocId = "TotalDonationID";
     await donatorsCollection.insertOne({
       donatorName,
-      donatedAmount: amount, 
+      donatedAmount: amount,
       createdAt: new Date(),
     });
     //accumulate the total donations
-    
+
     const totalDonationsDoc = await donationsCollection.findOne({ _id: totalDonationsDocId });
     if (totalDonationsDoc) {
       let totalDonationsNumeric = parseFloat(totalDonationsDoc.totalDonations);
       if (isNaN(totalDonationsNumeric)) {
-        totalDonationsNumeric = 0; 
+        totalDonationsNumeric = 0;
       }
       console.log("Updating totalDonations by:", amount);
       await donationsCollection.updateOne(
         { _id: totalDonationsDocId },
-        { $set: { totalDonations: totalDonationsNumeric + amount } } 
+        { $set: { totalDonations: totalDonationsNumeric + amount } }
       );
     } else {
       console.log("Initializing totalDonations with:", amount);
       await donationsCollection.insertOne({
         _id: totalDonationsDocId,
-        totalDonations: amount, 
+        totalDonations: amount,
       });
     }
     res.status(200).json({ message: "Donation successfully received" });
