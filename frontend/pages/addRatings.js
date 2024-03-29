@@ -43,6 +43,11 @@ const AddRatings = ({ setRatingsCallback, washroomId }) => {
   };
 
   const handleSubmit = async () => {
+    if (!rating || feedback.trim() === '') {
+      setSubmitMessage('Please provide a rating and feedback.');
+      return;
+    }
+
     try {
       const response = await fetch(`${SERVER_URL}/postRating/${washroomId}`, {
         method: 'PATCH',
