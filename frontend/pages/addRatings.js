@@ -13,10 +13,10 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 import { SERVER_URL } from '../constants/constants';
 
-const AddRatings = ({ washroomId }) => {
+const AddRatings = ({ setRatingsCallback, washroomId }) => {
   const starRatingOptions = [1, 2, 3, 4, 5];
   const [rating, setRating] = useState(null);
-  const [feedback, setFeedback] = useState(''); 
+  const [feedback, setFeedback] = useState('');
   const [submitMessage, setSubmitMessage] = useState('');
   const animatedButtonScale = new Animated.Value(1);
 
@@ -54,9 +54,12 @@ const AddRatings = ({ washroomId }) => {
       if (!response.ok) {
         console.log("Server failed:", response.status);
       } else {
-        setSubmitMessage("Rating and feedback added successfully!");
         setRating(null);
         setFeedback('');
+        const doc = await response.json();
+        setSubmitMessage(doc.message);
+        setRatingsCallback(doc.ratings);
+        console.log(doc.ratings);
       }
     } catch (error) {
         console.error('Error submitting rating:', error);
@@ -120,9 +123,9 @@ const styles = StyleSheet.create({
   },
   stars: {
     flexDirection: 'row',
-    justifyContent: 'center', 
+    justifyContent: 'center',
     flexWrap: 'wrap',
-    marginHorizontal: -2, 
+    marginHorizontal: -2,
   },
   starUnselected: {
     color: '#aaa',
@@ -155,7 +158,7 @@ const styles = StyleSheet.create({
   },
   submitMessage: {
     marginTop: 20,
-    color: 'green', 
+    color: 'green',
     fontSize: 16,
     textAlign: 'center',
   },

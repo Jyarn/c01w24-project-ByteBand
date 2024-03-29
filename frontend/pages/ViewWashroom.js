@@ -56,26 +56,29 @@ function parseContact(id, key, contacts) {
 const ViewWashroom = ({ route }) => {
   const [status, setStatus] = useState(null);
   const [response, setResponse] = useState(null);
-  const [displayTimes, setDisplayTimesFlag] = useState(false);
+  const [displayTimes, setDisplayTimesFlag] = useState(null);
+  const [ratings, setRatings] = useState(null);
 
   const washroomId = route.params.washroomId;
-  const currentDate = new Date("Tue Mar 26 2024 17:06:22");
+  const currentDate = new Date("Wed Mar 27 2024 17:06:22");
 
   useEffect(() => {
-    const getSchedule = async () => {
-      const res = await fetch(`${SERVER_URL}/getWashroomInfo/${washroomId}?day=${currentDate.getDay()}&hr=${currentDate.getHours()}&min=${currentDate.getMinutes()}`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      setStatus(res.status);
-      setResponse(await res.json());
-    };
-
     getSchedule();
   }, []);
+
+  const getSchedule = async () => {
+    const res = await fetch(`${SERVER_URL}/getWashroomInfo/${washroomId}?day=${currentDate.getDay()}&hr=${currentDate.getHours()}&min=${currentDate.getMinutes()}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    setStatus(res.status);
+    const doc = await res.json();
+    setResponse(doc);
+    setRatings(doc.ratings);
+  };
 
   if (status == null || response == null) {
     return (
@@ -101,14 +104,19 @@ const ViewWashroom = ({ route }) => {
     return (
       <ScrollView>
         <View style={styles.mainContainer}>
-          <Text style={{fontSize: 32}}>{response.name}</Text>
+          {response.name ?
+            <Text style={{fontSize: 32}}>{response.name}</Text>
+           : []}
 
-          <View style={[styles.iconContainer]}>
-            <Image
-              style={styles.icon}
-              source={require("../images/googlemap_location_pin.png")}/>
-            <Text style={styles.location}>{response.address}</Text>
-          </View>
+          {response.address ?
+            <View style={[styles.iconContainer]}>
+              <Image
+                style={styles.icon}
+                source={require("../images/googlemap_location_pin.png")}/>
+              <Text style={styles.location}>{response.address}</Text>
+            </View>
+          :
+           []}
 
           <TouchableOpacity
             style={[styles.iconContainer, styles.iconContainerSpacing]}
@@ -119,32 +127,39 @@ const ViewWashroom = ({ route }) => {
             />
             <Text style={styles.openButtonText}>
               {response.useSchedule ?
-                response.open != null ? "Open" : "False"
+                response.open != null ? "Open" : "Closed"
                 :
                 response.overrideStatus ? "Open" : "Closed"}
             </Text>
-            <Text style={[styles.openButtonText, {marginLeft: 45, marginRight: 110}]}>
-              {response.useSchedule ?
+            <Text style={[styles.openButtonText, {marginLeft: 20}]}>
+              {response.useSchedule && response.open != null ?
                 `${response.open.start} -- ${response.open.end}`
-                :
-                response.status}
+               :
+                "           "}
             </Text>
-          </TouchableOpacity>
+            <Image
+              style={[styles.icon, {marginLeft: 90, marginRight: 60}]}
+              source={displayTimes ? require("../images/dropdown_collapsed.png") : require("../images/dropdown_normal.png")}
+            />
+            </TouchableOpacity>
 
           {displayTimes ? parsedSchedule : []}
 
-          <View style={[styles.iconContainer, styles.iconContainerSpacing]}>
-            <Image
-              style={styles.icon}
-              source={require("../images/googlemap_contact_icon.png")}
-            />
-            <View>
-              {parsedContacts}
+          {response.contact ?
+            <View style={[styles.iconContainer, styles.iconContainerSpacing]}>
+              <Image
+                style={styles.icon}
+                source={require("../images/googlemap_contact_icon.png")}
+              />
+              <View>
+                {parsedContacts}
+              </View>
             </View>
-          </View>
+           :
+            []}
         </View>
-        <AddRatings washroomId={washroomId} />
-        <DisplayRatings ratings={response.ratings} />
+        <AddRatings setRatingsCallback={setRatings} washroomId={washroomId} />
+        <DisplayRatings rating={ratings} />
       </ScrollView>
     );
   }
