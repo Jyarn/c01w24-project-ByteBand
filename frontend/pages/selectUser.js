@@ -54,14 +54,14 @@ const SelectUser = ({ navigation }) => {
             setUsers(await getUsers());
         }
         loadUsers();
-    }, []);
+    }, [users]);
 
     return (
         <View style={styles.container}>
             <View style={{ flex: 1 }}>
                 <View style={{flexDirection: 'row', gap: 10, alignItems: 'center', marginVertical: 20}}>
                     <ImageButton
-                        onPress={() => navigation.navigate('Donation')}
+                        onPress={() => navigation.navigate('Home')}
                         imageStyle={{ height: 30, width: 30 }}
                         imageSource={require('../images/back.png')}
                     />
@@ -93,7 +93,7 @@ const SelectUser = ({ navigation }) => {
                                 </TouchableOpacity>
                                 <ImageButton
                                     onPress={() => confirmDeletion(name)}
-                                    imageStyle={{ height: 50, width: 50, marginTop: -15 }}
+                                    imageStyle={{ height: 50, width: 50, marginTop: -18, opacity: 0.7 }}
                                     imageSource={require('../images/delete.png')}
                                 />
                             </View>
@@ -105,8 +105,10 @@ const SelectUser = ({ navigation }) => {
                 </View>
             </View>
             {selected == "" ? <View />
-                : <TouchableOpacity onPress={() => console.log("Go to payment info")} style={styles.submitButton}>
-                    <Text style={styles.submitText}>Pay</Text>
+                : <TouchableOpacity onPress={() => {
+                    navigation.navigate('Donation', { userName: selected });
+                  }} style={styles.submitButton}>
+                    <Text style={styles.submitText}>Donate</Text>
                 </TouchableOpacity>}
         </View>
     );

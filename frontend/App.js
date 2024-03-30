@@ -2,12 +2,11 @@ import React from "react";
 
 import DonatorForm from "./pages/donatorForm";
 import Donation from "./pages/Donation";
-import UploadWashroomtime from "./pages/uploadWashroomtime";
+import ViewWashroom from "./pages/ViewWashroom";
 import BusinessAcknowledgement from "./pages/businessAcknowledgement";
 import AddWashrooms from "./pages/addWashrooms";
 import SelectUser from "./pages/selectUser";
 import HomeScreen from "./pages/homeScreen";
-import Ratings from "./pages/ratings";
 import News from "./pages/news";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -29,8 +28,9 @@ const App = () => {
           options={{headerShown: false }}
         />
         <Stack.Screen
-          name="WashroomTimes"
-          component={UploadWashroomtime}
+          name="WashroomInfo"
+          component={ViewWashroom}
+          options={{title: "Washroom Information" }}
         />
         <Stack.Screen
           name="SelectUser"
@@ -51,10 +51,6 @@ const App = () => {
           name="BusinessAck"
           component={BusinessAcknowledgement}
           options={{headerShown: false }}
-        />
-        <Stack.Screen
-          name="Ratings"
-          component={Ratings}
         />
         <Stack.Screen
           name="News"

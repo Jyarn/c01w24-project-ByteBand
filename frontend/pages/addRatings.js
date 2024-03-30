@@ -11,12 +11,12 @@ import {
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const SERVER_URL = "http://localhost:4000";
+import { SERVER_URL } from '../constants/constants';
 
-const AddRatings = ({ washroomId }) => {
+const AddRatings = ({ setRatingsCallback, washroomId }) => {
   const starRatingOptions = [1, 2, 3, 4, 5];
   const [rating, setRating] = useState(null);
-  const [feedback, setFeedback] = useState(''); 
+  const [feedback, setFeedback] = useState('');
   const [submitMessage, setSubmitMessage] = useState('');
   const animatedButtonScale = new Animated.Value(1);
 
@@ -43,6 +43,11 @@ const AddRatings = ({ washroomId }) => {
   };
 
   const handleSubmit = async () => {
+    if (!rating || feedback.trim() === '') {
+      setSubmitMessage('Please provide a rating and feedback.');
+      return;
+    }
+
     try {
       const response = await fetch(`${SERVER_URL}/postRating/${washroomId}`, {
         method: 'PATCH',
@@ -54,10 +59,12 @@ const AddRatings = ({ washroomId }) => {
       if (!response.ok) {
         console.log("Server failed:", response.status);
       } else {
-        setSubmitMessage("Rating and feedback added successfully!");
-        // Optionally reset the form here
         setRating(null);
         setFeedback('');
+        const doc = await response.json();
+        setSubmitMessage(doc.message);
+        setRatingsCallback(doc.ratings);
+        console.log(doc.ratings);
       }
     } catch (error) {
         console.error('Error submitting rating:', error);
@@ -68,7 +75,7 @@ const AddRatings = ({ washroomId }) => {
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
-        <Text style={styles.heading}>{rating ? `${rating}` : 'Tap to rate'}</Text>
+        {/* <Text style={styles.heading}>{rating ? `${rating}` : 'Tap to rate'}</Text> */}
         <View style={styles.stars}>
           {starRatingOptions.map((option) => (
             <TouchableWithoutFeedback
@@ -109,7 +116,7 @@ const AddRatings = ({ washroomId }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#f8f8f8',
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
@@ -120,27 +127,35 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   stars: {
-    display: 'flex',
     flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    marginHorizontal: -2,
   },
   starUnselected: {
     color: '#aaa',
+    margin: 2,
   },
   starSelected: {
     color: '#FF0000',
+    margin: 2,
   },
   input: {
+    width: '100%',
     height: 40,
     margin: 12,
-    borderWidth: 1,
+    borderWidth: 0.5,
     padding: 10,
+    borderRadius: 15,
   },
   submitButton: {
     marginTop: 20,
-    backgroundColor: '#FF0000', // Example button color
+    backgroundColor: '#FF0000',
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 5,
+    width: '60%',
+    alignSelf: 'center',
   },
   submitText: {
     color: 'white',
@@ -149,9 +164,11 @@ const styles = StyleSheet.create({
   },
   submitMessage: {
     marginTop: 20,
-    color: 'green', // Or change based on success or error
+    color: 'green',
     fontSize: 16,
+    textAlign: 'center',
   },
 });
+
 
 export default AddRatings;

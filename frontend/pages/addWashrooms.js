@@ -7,7 +7,8 @@ import {
   StyleSheet,
 } from "react-native";
 import { RadioButton } from 'react-native-paper';
-import { SERVER_URL } from "../constants/constants";
+import { SERVER_URL } from "../constants/constants.js";
+
 import ProvinceSelector from "../components/provinceSelector";
 import ImageButton from "../components/imageButton";
 
@@ -70,7 +71,7 @@ const AddWashrooms = ({ navigation }) => {
     const body = await res.json();
 
     if (res.status == 200) {
-      // do something
+      navigation.navigate('Home');
     } else {
       console.log(`failed to submit washroom application (${body.error})`);
     }
@@ -105,6 +106,7 @@ const AddWashrooms = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Location Name"
+        placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
         value={locationName}
         autoCapitalize="words"
         onChangeText={setLocationName}
@@ -113,6 +115,7 @@ const AddWashrooms = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Address"
+        placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
         value={address}
         autoCapitalize="words"
         onChangeText={setAddress}
@@ -120,6 +123,7 @@ const AddWashrooms = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="City"
+        placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
         value={city}
         autoCapitalize="words"
         onChangeText={setCity}
@@ -129,6 +133,7 @@ const AddWashrooms = ({ navigation }) => {
         <TextInput
           style={[styles.input, styles.flexHalf]}
           placeholder="Postal Code"
+          placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
           value={postal}
           autoCapitalize="characters"
           onChangeText={setPostal}
@@ -138,6 +143,7 @@ const AddWashrooms = ({ navigation }) => {
       <TextInput
         style={styles.input}
         placeholder="Email Address"
+        placeholderTextColor={'rgba(0, 0, 0, 0.5)'}
         value={email}
         onChangeText={setEmail}
         keyboardType="email-address"
@@ -167,20 +173,21 @@ const styles = StyleSheet.create({
   radioContainer: {
     flexDirection: "row",
     marginBottom: 20,
-    gap: 5,
+    gap: 50,
+    left: 40,
   },
   radioText: {
     textAlign: "center",
     marginTop: 7,
-    marginRight: 25
+    marginRight: 25,
+    left: -50,
   },
   input: {
+    backgroundColor: "#F9F9F9",
     marginBottom: 20,
     paddingHorizontal: 10,
     height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    borderRadius: 5,
+    borderRadius: 15,
   },
   row: {
     flexDirection: "row",
@@ -190,9 +197,12 @@ const styles = StyleSheet.create({
     width: "48%",
   },
   submitButton: {
-    backgroundColor: "red",
+    backgroundColor: "#EE4B2B",
     borderRadius: 5,
-    marginTop: 20,
+    padding: 3,
+    marginTop: 50,
+    width: "40%",
+    left: 110,
   },
   submitText: {
     color: "white",
@@ -202,10 +212,12 @@ const styles = StyleSheet.create({
   },
   subtext: {
     color: "gray",
-    marginTop: -20,
+    marginTop: -10,
+    right: -5,
   },
+
   invis: {
-    color: "white",
+    opacity: 0,
   },
   errorText: {
     color: "red",

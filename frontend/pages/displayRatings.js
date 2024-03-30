@@ -1,71 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
-const DisplayRatings = ({ washroomId }) => {
-  const [ratings, setRatings] = useState([]);
+import { SERVER_URL } from "../constants/constants";
 
-  const SERVER_URL = "http://localhost:4000";
+function arrarify(obj) {
+  let ret = [];
+  for (const i in obj)
+    ret.push(obj[i]);
 
-  useEffect(() => {
-    const fetchRatings = async () => {
-      try {
-        const response = await fetch(`${SERVER_URL}/getRating/${washroomId}`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch ratings');
-        }
-        const data = await response.json();
-        setRatings(data.ratings);
-      } catch (error) {
-        console.error('Error:', error);
-      }
-    };
+  return ret;
+}
 
-    fetchRatings();
-  }, [washroomId]);
+const DisplayRatings = ({ rating }) => {
+  const ratings = arrarify(rating);
+  const calculateAverageRating = () => {
+    if (ratings == null || ratings.length === 0) return "No ratings";
+    const sum = ratings.reduce((acc, curr) => acc + Number(curr.rating), 0);
+    const average = sum / ratings.length;
+    return `${average.toFixed(1)}/5`;
+  };
 
   return (
     <View style={styles.container}>
-    {ratings.map((rating, index) => (
+      <Text style={styles.averageRatingText}>Average Rating: {calculateAverageRating()}</Text>
+      {ratings.map((rating, index) => (
         <View key={index} style={styles.rating}>
-        {/* <Text style={styles.ratingText}>Rating: {rating.rating} Stars</Text> */}
-        <Text style={styles.feedbackText}>Feedback: {rating.feedback}</Text>
-        <Text style={styles.feedbackText}>Date: {rating.date}</Text>
+          {/* <Text style={styles.ratingText}>Rating: {rating.rating} Stars</Text> */}
+          <Text style={styles.feedbackText}>Feedback: {rating.feedback}</Text>
+          <Text style={styles.feedbackText}>Date: {rating.date}</Text>
         </View>
-    ))}
+      ))}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 20, // Add padding around the entire container
-    backgroundColor: '#f0f0f0', // Light grey background for the container
-    borderRadius: 10, // Rounded corners for the container
-    margin: 10, // Margin around the container
-    shadowColor: '#000', // Shadow for container
+    padding: 20,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
+    margin: 10,
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5, // Elevation for Android (shadow equivalent)
+    elevation: 5,
   },
   rating: {
-    backgroundColor: '#fff', // White background for each rating
-    padding: 10, // Padding inside each rating
-    borderRadius: 5, // Rounded corners for each rating
-    borderWidth: 1, // Border for each rating
-    borderColor: '#ddd', // Light grey border
-    marginBottom: 10, // Space between each rating
+    backgroundColor: '#fff',
+    padding: 10,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: '#ddd',
+    marginBottom: 10,
   },
-  ratingText: {
-    fontSize: 16, // Font size for the text
-    color: '#333', // Dark grey color for text for better readability
+  averageRatingText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 10,
+    color: '#333',
   },
-  feedbackText: {   
-    marginTop: 5, // Margin top for feedback text to separate it from the rating
-    fontSize: 14, // Slightly smaller font size for feedback
-    color: '#666', // Lighter text color for feedback
-    fontStyle: 'italic', // Italicize feedback to differentiate from rating
+  feedbackText: {
+    marginTop: 5,
+    fontSize: 16,
+    color: '#666',
+    fontStyle: 'italic',
   },
 });
-  
+
 export default DisplayRatings;

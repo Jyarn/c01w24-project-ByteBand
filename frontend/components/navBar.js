@@ -9,13 +9,8 @@ export default NavBar = ({ navigation }) => {
                 imageStyle={styles.icon} 
                 imageSource={require('../images/add.png')}
             />
-            <ImageButton 
-                onPress={() => navigation.navigate('WashroomTimes')} 
-                imageStyle={styles.icon} 
-                imageSource={require('../images/schedule.png')} 
-            />
             <ImageButton
-                onPress={() => navigation.navigate('Donation')}
+                onPress={() => navigation.navigate('SelectUser')}
                 imageStyle={styles.icon}
                 imageSource={require('../images/donation.png')}
             />
@@ -25,9 +20,9 @@ export default NavBar = ({ navigation }) => {
                 imageSource={require('../images/sponsor.png')}
             />
             <ImageButton
-                onPress={() => navigation.navigate('Ratings')}
+                onPress={() => navigation.navigate('News')}
                 imageStyle={styles.icon}
-                imageSource={require('../images/rating.png')}
+                imageSource={require('../images/news.png')}
             />
         </View>
     );
@@ -40,10 +35,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: 'white',
         position: 'absolute',
-        bottom: 10,
-        left: '5%',
+        bottom: 20,
+        left: '10%',
         height: '10%',
-        width: '90%',
+        width: '80%',
         alignSelf: 'flex-end',
         borderRadius: 20,
         borderColor: 'red',
@@ -52,6 +47,6 @@ const styles = StyleSheet.create({
     icon: {
         height: 50,
         width: 50,
-        tintColor: 'red',
+        tintColor: '#FF3B30',
     }
 })

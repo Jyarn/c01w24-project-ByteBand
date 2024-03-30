@@ -47,6 +47,14 @@ const DonatorForm = ({ navigation }) => {
             return;
         }
 
+        const userJSON = await AsyncStorage.getItem('users');
+        const userList = Object.keys(JSON.parse(userJSON));
+        // check name isn't already a user
+        if (userList.includes(name)) {
+            setError("User with this name is already registered");
+            return;
+        }
+        
         // check if address starts with number
         if (!address.match(/^\d+(\s\w+){2,}/)) {
             setError("Please Enter Address as number street name");
@@ -79,8 +87,8 @@ const DonatorForm = ({ navigation }) => {
         }
         const users = await getUsers();
         users[name] = user;
-
-        storeUsers(users);
+        await storeUsers(users);
+        navigation.navigate('SelectUser')
     };
 
     return (
@@ -228,7 +236,7 @@ const styles = StyleSheet.create({
         width: "48%",
     },
     submitButton: {
-        backgroundColor: "red",
+        backgroundColor: "#EE4B2B",
         borderRadius: 15,
         marginTop: 50,
         width: "20%",

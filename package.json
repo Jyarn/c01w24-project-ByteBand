@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@prismicio/client": "^7.3.1"
+  }
+}

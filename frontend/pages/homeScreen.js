@@ -1,44 +1,150 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   TextInput,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Alert,
+  Image,
+  Pressable,
+  ActivityIndicator
 } from "react-native";
 import MapView from "react-native-maps";
-import NavBar from "../components/navBar"
+import * as Location from "expo-location";
+import NavBar from "../components/navBar";
+import MapMarker from "../components/mapMarker";
+import { SERVER_URL } from "../constants/constants";
 
-export default HomeScreen = ({navigation}) => {
-  //currently this does nothing as we can't search locations
+const DEFAULT_REGION = {
+  latitude: 43.7824,
+  longitude: -79.1863,
+  latitudeDelta: 0.015,
+  longitudeDelta: 0.015,
+}
+
+export default HomeScreen = ({ navigation }) => {
+  const [washrooms, setWashrooms] = useState(undefined);
+  const [region, setRegion] = useState(null);
   const [searchLocation, setSearchLocation] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [loadingSearch, setLoadingSearch] = useState(false);
 
-  return (
-    <View style={{flex: 1}}>
-      <MapView
-        style={{width: '100%', height: '100%'}}
-        initialRegion={{
-          latitude: 43.7824,
-          longitude: -79.1863,
+  const mapRef = useRef();
+
+  useEffect(() => {
+    const getWashrooms = async () => {
+      try {
+        await fetch(`${SERVER_URL}/getAllWashrooms`).then(async (response) => {
+          if (!response.ok) {
+            console.log("Server failed:", response.status);
+          } else {
+            await response.json().then((data) => {
+              setWashrooms(data.response);
+            })
+          }
+        });
+      } catch (error) {
+        console.log("Fetch function failed:", error);
+      }
+    };
+
+    const getUserLocation = async () => {
+      try {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+          console.log("Permissions to access location was denied.");
+          setRegion(DEFAULT_REGION);
+        } else {
+          let location = await Location.getCurrentPositionAsync({});
+          setRegion({
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.015,
+          });
+        }
+      } catch (error) {
+        console.log("Get user location failed:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getWashrooms();
+    getUserLocation();
+  }, []);
+
+  const fetchSearchLocation = async () => {
+    try {
+      setLoadingSearch(true);
+      await Location.geocodeAsync(searchLocation).then((data) => {
+        setRegion({
+          latitude: data[0].latitude,
+          longitude: data[0].longitude,
           latitudeDelta: 0.015,
           longitudeDelta: 0.015,
-        }}
-        mapPadding={{top:100, left: 315}}
-      />
-      <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder="Search for a place or address"
-          value={searchLocation}
-          onChangeText={setSearchLocation}
-        />
-        <TouchableOpacity onPress={()=> navigation.navigate('News')} style={styles.announcement}>
-          <Text style={styles.announcementText}>Announcements</Text>
-        </TouchableOpacity>
-      </View>
+        });
+        mapRef.current.animateToRegion(region);
+        setLoadingSearch(false);
+      });
+    } catch (error) {
+      setLoadingSearch(false);
+      console.log("Fetch search location failed:", error);
+    }
+  };
 
-      <NavBar navigation={navigation}/>
+  return (
+    <View style={{ flex: 1 }}>
+      {loading
+        ?
+        <View style={styles.mapLoadingContainer}>
+          <Image source={require('../images/gohereLogo.jpg')}
+            style={{ height: 100, width: 100, borderRadius: 5 }}
+          />
+          <ActivityIndicator size="large" />
+          <Text style={styles.mapLoadingText}>Fetching map data...</Text>
+        </View>
+        :
+        washrooms &&
+        <View>
+          <MapView
+            style={{ width: '100%', height: '100%' }}
+            region={region}
+            mapPadding={{ top: 100, bottom: 100 }}
+            showsUserLocation={true}
+            ref={mapRef}
+          >
+            {washrooms.map((washroom) => {
+              return (
+                <MapMarker
+                  key={washroom._id}
+                  washroom={washroom}
+                  onPress={() => (
+                    navigation.navigate("WashroomInfo", { washroomId: washroom._id })
+                  )}
+                />);
+            })}
+          </MapView>
+          <View style={styles.container}>
+            <View style={styles.searchBar}>
+              <TextInput
+                style={styles.input}
+                placeholder="Search for a place or address"
+                value={searchLocation}
+                onChangeText={setSearchLocation}
+              />
+              <Pressable style={styles.searchButton} onPress={!loadingSearch ? fetchSearchLocation : null}>
+                {!loadingSearch
+                  ?
+                  <Text>Search</Text>
+                  :
+                  <ActivityIndicator />}
+              </Pressable>
+            </View>
+          </View>
+          <NavBar navigation={navigation} />
+        </View>
+      }
     </View>
   );
 };
@@ -52,44 +158,35 @@ const styles = StyleSheet.create({
     width: '100%',
     marginLeft: '5%',
   },
+  mapLoadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20,
+  },
+  mapLoadingText: {
+    fontSize: 24,
+  },
+  searchBar: {
+    flexDirection: 'row',
+  },
   input: {
     backgroundColor: 'white',
     height: 40,
-    width: '90%',
+    width: '70%',
     borderRadius: 30,
     borderColor: 'red',
     borderWidth: 0,
     padding: 10,
     fontSize: 16,
   },
-  announcement: {
-    backgroundColor: 'red',
-    height: 40,
-    maxWidth: '38%',
-    marginTop: 10,
-    borderRadius: 10,
-    borderColor: 'red',
-    paddingLeft: 10,
-    borderWidth: 3,
-    justifyContent: 'center'
-  },
-  announcementText: {
-    fontSize: 16,
-    color: 'white',
-  },
-  navBar: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    alignItems: 'center',
+  searchButton: {
     backgroundColor: 'white',
-    position: 'absolute',
-    bottom: 10,
-    left: '5%',
-    height: '10%',
-    width: '90%',
-    alignSelf: 'flex-end',
+    height: 40,
+    width: '20%',
+    marginLeft: 5,
+    padding: 10,
     borderRadius: 20,
-    borderColor: 'red',
-    borderWidth: 3,
+    alignItems: 'center'
   },
 });
