@@ -30,7 +30,11 @@ afterAll(async () => {
 
 beforeEach(async () => {
   const coll = db.collection(COLLECTIONS.washrooms);
-  await coll.deleteMany({ }); 
+  try {
+    await coll.drop({ }); // reset database
+  } catch (error) {
+    console.log(error.message);
+  }
   const insertResult = await coll.insertOne({
     address: "1587 Marshall Street, Baltimore",
     useSchedule: false,
