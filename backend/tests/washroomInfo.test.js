@@ -6,10 +6,6 @@ import {
   COLLECTIONS
 } from "../constants/constants.js";
 
-test("Placeholder test until tests are fixed", () => {
-  expect(true).toBe(true);
-});
-
 let db;
 let client;
 let washroomids;
